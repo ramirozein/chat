@@ -51,9 +51,12 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Asumimos que vas a correr migraciones de forma externa o al iniciar, 
-# Puedes copiar la carpeta de prisma si piensas ejecutar migraciones en run-time
-# COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# Copiamos la carpeta de prisma para ejecutar migraciones/push en run-time
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER root
+# Instalamos la CLI de prisma de manera global para que npx prisma db push funcione sin problemas en producción
+RUN npm install -g prisma@7.4.2
 
 USER nextjs
 
@@ -64,4 +67,5 @@ ENV PORT 3003
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+# Ejecutar prisma db push antes de arrancar la aplicación
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node server.js"]
