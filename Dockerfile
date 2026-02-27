@@ -3,7 +3,6 @@ FROM node:20-alpine AS base
 
 # 2. Dependencies layer
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -20,12 +19,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# [AQUÍ ESTÁ LA SOLUCIÓN AL ERROR]
-# Generar Prisma Client usando una URL dummy válida para que no dé error PrismaConfigEnvError
+# Generar Prisma Client usando una URL dummy
 RUN DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy" npx prisma generate
 
-# Build Next.js application (no requerirá base de datos si usas llamadas API en Runtime o Fetch simples)
-# Usamos un dummy de base de datos también por si algún componente servidor intenta evaluar código de db al compilar
+# Build Next.js (standalone output)
 RUN DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy" npx next build
 
 # 4. Production Run layer
@@ -34,39 +31,36 @@ WORKDIR /app
 
 ENV NODE_ENV production
 
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Copiar node_modules completos (necesarios para tsx, socket.io, prisma, etc.)
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# Copiar el build de Next.js standalone y archivos estáticos
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copiar el servidor personalizado y archivos necesarios
+COPY --from=builder --chown=nextjs:nodejs /app/server.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./
 
-# Copiamos la configuración de prisma y el schema
+# Copiar Prisma Client generado
+COPY --from=builder --chown=nextjs:nodejs /app/generated ./generated
+
+# Copiar configuración de Prisma para db push
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
-USER root
-# Copiamos TODOS los node_modules originales con permisos del usuario nextjs
-COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
-
 USER nextjs
 
-# Exponemos el puerto estandar por el que escuchará el proceso de Node.js adentro de Docker
+# Puerto de la aplicación
 EXPOSE 3003
-# Seteamos PORT env variable en 3003
 ENV PORT 3003
-# set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-# Ejecutar prisma db push antes de arrancar la aplicación
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node server.js"]
+# Ejecutar prisma db push y luego arrancar el servidor personalizado con Socket.IO
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npx tsx server.ts"]
