@@ -56,8 +56,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER root
-# Instalamos globalmente para evitar conflictos con node_modules locales (error isDescendantOf)
-RUN npm install -g prisma@7.4.2 dotenv
+# Instalamos localmente para tener el módulo 'prisma/config' disponible, pero añadimos --legacy-peer-deps para evitar el error 'isDescendantOf'
+RUN npm install prisma@7.4.2 --no-package-lock --legacy-peer-deps
 
 USER nextjs
 
