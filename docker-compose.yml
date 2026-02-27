@@ -27,9 +27,10 @@ services:
       # Token secreto para JWT (si lo usas) y Node env
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET:-un_secreto_muy_seguro}
+      PORT: ${APP_PORT:-3003}
     ports:
-      # Exponemos hacia afuera en el APP_PORT (ej: 3003, 8080) hacia el 3000 interno del contenedor
-      - "${APP_PORT:-3000}:3000"
+      # Exponemos hacia afuera y hacia adentro en el mismo puerto que indiques (por defecto 3003)
+      - "${APP_PORT:-3003}:${APP_PORT:-3003}"
 
 volumes:
   postgres_data:
