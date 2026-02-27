@@ -56,9 +56,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER root
-# Copiamos TODOS los node_modules originales para garantizar que el CLI de prisma 
-# y su dependencia prisma/config existan localmente sin lidiar con errores de npm.
-COPY --from=deps /app/node_modules ./node_modules
+# Copiamos TODOS los node_modules originales con permisos del usuario nextjs
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 USER nextjs
 
