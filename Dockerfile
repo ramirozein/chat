@@ -56,8 +56,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER root
-# Instalamos prisma y dotenv en el entorno del runner para que npx prisma use estos módulos y su configuración
-RUN npm install prisma@7.4.2 dotenv
+# Instalamos globalmente para evitar conflictos con node_modules locales (error isDescendantOf)
+RUN npm install -g prisma@7.4.2 dotenv
 
 USER nextjs
 
