@@ -1,0 +1,27 @@
+# Dependencias
+node_modules
+npm-debug.log*
+
+# Build de Next.js (se genera en Docker)
+.next
+
+# Archivos de entorno
+.env
+.env.local
+.env.production
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Otros
+README.md
