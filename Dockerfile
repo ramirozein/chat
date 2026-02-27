@@ -69,4 +69,4 @@ ENV PORT 3003
 ENV HOSTNAME "0.0.0.0"
 
 # Ejecutar prisma db push antes de arrancar la aplicación
-CMD ["sh", "-c", "DATABASE_URL=\"$DATABASE_URL\" npx prisma db push --accept-data-loss --skip-generate && node server.js"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node server.js"]
