@@ -1,34 +1,35 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:16-alpine
-    restart: unless-stopped
+    container_name: movie-chat-db
+    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: chat
-    volumes:
-      - datos_postgres:/var/lib/postgresql/data
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-movie_chat}
     ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      # Exponemos hacia afuera en el puerto 5422 o el especificado por DB_PORT
+      - "${DB_PORT:-5422}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   app:
     build: .
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/chat?schema=public
-      JWT_SECRET: ${JWT_SECRET:-clave-secreta-jwt-desarrollo-2024}
-      CLAVE_CIFRADO: ${CLAVE_CIFRADO:-clave-cifrado-32chars-abcdefgh!}
-      NODE_ENV: production
+    container_name: movie-chat-app
+    restart: always
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+    environment:
+      # URL interna que usará Next.js para conectarse a postgresql en su mismo docker network
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-movie_chat}?schema=public
+      # Token secreto para JWT (si lo usas) y Node env
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-un_secreto_muy_seguro}
+    ports:
+      # Exponemos hacia afuera en el APP_PORT (ej: 3003, 8080) hacia el 3000 interno del contenedor
+      - "${APP_PORT:-3000}:3000"
 
 volumes:
-  datos_postgres:
+  postgres_data:

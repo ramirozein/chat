@@ -1,50 +1,67 @@
-# ========== Etapa 1: Dependencias ==========
-FROM node:20-alpine AS deps
+# 1. Base image
+FROM node:20-alpine AS base
+
+# 2. Dependencies layer
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Instalar pnpm
+# Enable corepack and pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Copy dependencies files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
 RUN pnpm install --frozen-lockfile
 
-# ========== Etapa 2: Build ==========
-FROM node:20-alpine AS builder
+# 3. Build layer
+FROM base AS builder
 WORKDIR /app
-
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generar cliente de Prisma
-RUN npx prisma generate
+# [AQUÍ ESTÁ LA SOLUCIÓN AL ERROR]
+# Generar Prisma Client usando una URL dummy válida para que no dé error PrismaConfigEnvError
+RUN DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy" npx prisma generate
 
-# Construir la aplicación Next.js
-RUN pnpm build
+# Build Next.js application (no requerirá base de datos si usas llamadas API en Runtime o Fetch simples)
+# Usamos un dummy de base de datos también por si algún componente servidor intenta evaluar código de db al compilar
+RUN DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy" npx next build
 
-# ========== Etapa 3: Producción ==========
-FROM node:20-alpine AS runner
+# 4. Production Run layer
+FROM base AS runner
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+ENV NODE_ENV production
 
-ENV NODE_ENV=production
+# Uncomment the following line in case you want to disable telemetry during runtime.
+# ENV NEXT_TELEMETRY_DISABLED 1
 
-# Copiar archivos necesarios
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
-COPY --from=builder /app/pnpm-workspace.yaml ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/server.ts ./server.ts
-COPY --from=builder /app/lib ./lib
-COPY --from=builder /app/next.config.ts ./next.config.ts
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Asumimos que vas a correr migraciones de forma externa o al iniciar, 
+# Puedes copiar la carpeta de prisma si piensas ejecutar migraciones en run-time
+# COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER nextjs
+
+# Exponemos el puerto estandar por el que escuchará el proceso de Node.js adentro de Docker
 EXPOSE 3000
+# Seteamos PORT env variable en 3000
+ENV PORT 3000
+# set hostname to localhost
+ENV HOSTNAME "0.0.0.0"
 
-# Ejecutar migraciones y arrancar el servidor
-CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx server.ts"]
+CMD ["node", "server.js"]
