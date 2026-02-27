@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/contextos/AuthContexto'
 import { useSocket } from '@/hooks/useSocket'
-import { Spinner } from '@heroui/react'
 import NavbarConversaciones from '@/componentes/NavbarConversaciones'
 import AreaChat from '@/componentes/AreaChat'
 
@@ -146,14 +145,31 @@ export default function PaginaChat() {
 
   if (cargando) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}>
-        <Spinner size="lg" color="primary" />
-      </div>
+      <>
+        <style jsx>{`
+          .spinner-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #FFFFFF;
+          }
+          .spinner-ring {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #FFEDD5;
+            border-top-color: #F97316;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+        <div className="spinner-page">
+          <div className="spinner-ring" />
+        </div>
+      </>
     )
   }
 
@@ -171,9 +187,10 @@ export default function PaginaChat() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'rgba(0,0,0,0.3)',
             zIndex: 40,
             display: 'none',
+            backdropFilter: 'blur(4px)',
           }}
           className="overlay-movil"
         />
@@ -185,12 +202,13 @@ export default function PaginaChat() {
           width: '320px',
           minWidth: '320px',
           height: '100vh',
-          backgroundColor: 'var(--color-superficie)',
+          backgroundColor: '#FFFFFF',
           borderRight: '1px solid var(--color-borde)',
           display: 'flex',
           flexDirection: 'column',
-          transition: 'transform 0.3s ease',
+          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           zIndex: 50,
+          boxShadow: '2px 0 8px rgba(0, 0, 0, 0.04)',
         }}
         className={`sidebar ${sidebarAbierto ? 'sidebar-abierto' : ''}`}
       >

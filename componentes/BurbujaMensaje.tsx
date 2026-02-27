@@ -13,35 +13,38 @@ export default function BurbujaMensaje({ contenido, autor, esMio, hora }: Props)
       display: 'flex',
       justifyContent: esMio ? 'flex-end' : 'flex-start',
       marginBottom: '0.25rem',
+      animation: 'fadeIn 0.2s ease-out',
     }}>
       <div style={{
         maxWidth: '75%',
-        padding: '0.625rem 0.875rem',
-        borderRadius: esMio ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-        backgroundColor: esMio
-          ? 'rgba(99, 102, 241, 0.85)'
-          : 'var(--color-superficie-2)',
-        color: esMio ? '#fff' : 'var(--color-texto)',
+        padding: '0.75rem 1rem',
+        borderRadius: esMio ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+        backgroundColor: esMio ? '#F97316' : '#FFFFFF',
+        color: esMio ? '#FFFFFF' : 'var(--color-texto)',
         wordBreak: 'break-word',
+        boxShadow: esMio
+          ? '0 2px 8px rgba(249, 115, 22, 0.25)'
+          : '0 1px 4px rgba(0, 0, 0, 0.06)',
+        border: esMio ? 'none' : '1px solid var(--color-borde)',
       }}>
         {!esMio && (
           <p style={{
             margin: '0 0 0.25rem 0',
-            fontSize: '0.7rem',
+            fontSize: '0.72rem',
             fontWeight: '600',
-            color: 'var(--color-acento)',
+            color: '#F97316',
           }}>
             {autor}
           </p>
         )}
-        <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>
+        <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.5' }}>
           {contenido}
         </p>
         <p style={{
-          margin: '0.25rem 0 0 0',
+          margin: '0.3rem 0 0 0',
           fontSize: '0.65rem',
           textAlign: 'right',
-          opacity: 0.7,
+          opacity: esMio ? 0.85 : 0.5,
         }}>
           {hora}
         </p>

@@ -1,14 +1,13 @@
 import { createServer } from 'http'
 import next from 'next'
 import { Server } from 'socket.io'
-import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 import { cifrarMensaje, descifrarMensaje } from './lib/cifrado'
+import { prisma } from './lib/prisma'
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handler = app.getRequestHandler()
-const prisma = new PrismaClient()
 
 const JWT_SECRET = process.env.JWT_SECRET || 'clave-secreta-por-defecto'
 
