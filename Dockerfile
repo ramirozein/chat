@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generar Prisma Client usando una URL dummy
+# Generar Prisma Client (prisma.config.ts necesita DATABASE_URL para cargar)
 RUN DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy" npx prisma generate
 
 # Build Next.js (standalone output)
