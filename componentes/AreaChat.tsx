@@ -66,7 +66,7 @@ export default function AreaChat({
             justify-content: center;
             gap: 1rem;
             padding: 2rem;
-            background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%);
+            background: var(--color-fondo);
             position: relative;
           }
           .btn-menu-vacio {
@@ -78,37 +78,42 @@ export default function AreaChat({
           .vacio-icon {
             width: 88px;
             height: 88px;
-            border-radius: 24px;
-            background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+            border-radius: var(--radio-xl);
+            background: var(--color-primario-contenedor);
+            border: 1px solid var(--color-borde);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.5rem;
-            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.1);
+            animation: gentleFloat 3s ease-in-out infinite;
           }
           .vacio-titulo {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            color: #1E293B;
+            color: var(--color-texto);
           }
           .vacio-desc {
             margin: 0;
-            font-size: 0.9rem;
-            color: #64748B;
+            font-size: 0.88rem;
+            color: var(--color-texto-secundario);
             text-align: center;
             max-width: 280px;
             line-height: 1.5;
           }
           .btn-menu-icono {
             padding: 0.5rem 0.85rem;
-            background: #FFF7ED;
-            color: #F97316;
-            border: none;
-            border-radius: 12px;
+            background: var(--color-superficie);
+            color: var(--color-primario);
+            border: 1px solid var(--color-borde);
+            border-radius: var(--radio-md);
             font-size: 1.1rem;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all var(--transicion);
+          }
+          .btn-menu-icono:hover {
+            background: var(--color-superficie-2);
           }
           @media (max-width: 768px) {
             .btn-menu-vacio { display: block; }
@@ -136,56 +141,56 @@ export default function AreaChat({
           display: flex;
           flex-direction: column;
           height: 100vh;
-          background: #FAFAFA;
+          background: var(--color-fondo);
           min-width: 0;
         }
         .chat-header {
-          padding: 0.875rem 1.25rem;
-          border-bottom: 1px solid #E2E8F0;
-          background: #FFFFFF;
+          padding: 0.75rem 1.25rem;
+          border-bottom: 1px solid var(--color-borde);
+          background: var(--color-fondo-elevado);
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
           flex-shrink: 0;
         }
         .btn-menu-chat {
           display: none;
         }
         .header-avatar {
-          width: 42px;
-          height: 42px;
-          min-width: 42px;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #F97316, #FB923C);
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          border-radius: var(--radio-md);
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.85rem;
-          font-weight: 600;
+          font-size: 0.8rem;
+          font-weight: 700;
           color: #FFFFFF;
-          box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+          box-shadow: 0 2px 8px rgba(255, 107, 44, 0.2);
         }
         .header-nombre {
           margin: 0;
           font-weight: 600;
-          font-size: 1rem;
-          color: #1E293B;
+          font-size: 0.95rem;
+          color: var(--color-texto);
         }
         .header-estado {
           margin: 0;
-          font-size: 0.78rem;
-          color: #22C55E;
+          font-size: 0.75rem;
+          color: var(--color-exito);
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
         }
         .online-dot {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: #22C55E;
+          background: var(--color-exito);
           display: inline-block;
+          box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
         }
         .chat-mensajes {
           flex: 1;
@@ -193,7 +198,7 @@ export default function AreaChat({
           padding: 1.25rem;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 0.35rem;
         }
         .cargando-center {
           display: flex;
@@ -204,13 +209,10 @@ export default function AreaChat({
         .spinner {
           width: 32px;
           height: 32px;
-          border: 3px solid #FFEDD5;
-          border-top-color: #F97316;
+          border: 3px solid var(--color-superficie-3);
+          border-top-color: var(--color-primario);
           border-radius: 50%;
-          animation: spin 0.6s linear infinite;
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
+          animation: spin 0.7s linear infinite;
         }
         .sin-mensajes {
           display: flex;
@@ -218,14 +220,15 @@ export default function AreaChat({
           align-items: center;
           justify-content: center;
           height: 100%;
-          color: #64748B;
+          color: var(--color-texto-secundario);
           font-size: 0.9rem;
         }
         .sin-mensajes-icon {
           width: 64px;
           height: 64px;
-          border-radius: 16px;
-          background: #FFF7ED;
+          border-radius: var(--radio-lg);
+          background: var(--color-primario-contenedor);
+          border: 1px solid var(--color-borde);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -234,13 +237,17 @@ export default function AreaChat({
         }
         .btn-menu-icono {
           padding: 0.5rem 0.85rem;
-          background: #FFF7ED;
-          color: #F97316;
-          border: none;
-          border-radius: 12px;
+          background: var(--color-superficie);
+          color: var(--color-primario);
+          border: 1px solid var(--color-borde);
+          border-radius: var(--radio-md);
           font-size: 1.1rem;
           cursor: pointer;
-          font-family: 'Inter', sans-serif;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          transition: all var(--transicion);
+        }
+        .btn-menu-icono:hover {
+          background: var(--color-superficie-2);
         }
         @media (max-width: 768px) {
           .btn-menu-chat { display: block; }
@@ -273,7 +280,7 @@ export default function AreaChat({
           ) : mensajes.length === 0 ? (
             <div className="sin-mensajes">
               <div className="sin-mensajes-icon">👋</div>
-              <p style={{ fontWeight: 500, color: '#1E293B' }}>¡Envía el primer mensaje!</p>
+              <p style={{ fontWeight: 600, color: 'var(--color-texto)' }}>¡Envía el primer mensaje!</p>
             </div>
           ) : (
             mensajes.map(msg => (

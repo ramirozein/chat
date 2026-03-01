@@ -30,9 +30,9 @@ export default function EntradaMensaje({ onEnviar }: Props) {
     <>
       <style jsx>{`
         .entrada-wrapper {
-          padding: 1rem 1.25rem;
-          border-top: 1px solid #E2E8F0;
-          background: #FFFFFF;
+          padding: 0.875rem 1.25rem;
+          border-top: 1px solid var(--color-borde);
+          background: var(--color-fondo-elevado);
         }
         .entrada-form {
           display: flex;
@@ -41,52 +41,51 @@ export default function EntradaMensaje({ onEnviar }: Props) {
         }
         .entrada-input {
           flex: 1;
-          padding: 0.875rem 1.125rem;
-          border: 2px solid #E2E8F0;
-          border-radius: 16px;
-          font-size: 0.95rem;
-          font-family: 'Inter', sans-serif;
-          color: #1E293B;
-          background: #F8FAFC;
+          padding: 0.8rem 1rem;
+          border: 1px solid var(--color-borde);
+          border-radius: var(--radio-lg);
+          font-size: 0.9rem;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          color: var(--color-texto);
+          background: var(--color-superficie);
           outline: none;
-          transition: all 0.2s ease;
+          transition: all var(--transicion);
           min-width: 0;
         }
         .entrada-input::placeholder {
-          color: #94A3B8;
+          color: var(--color-texto-terciario);
         }
         .entrada-input:hover {
-          border-color: #FDBA74;
+          border-color: var(--color-borde-hover);
         }
         .entrada-input:focus {
-          border-color: #F97316;
-          background: #FFFFFF;
-          box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+          border-color: var(--color-primario);
+          box-shadow: 0 0 0 3px var(--color-primario-suave);
         }
         .entrada-btn {
-          padding: 0.875rem 1.75rem;
+          padding: 0.8rem 1.5rem;
           border: none;
-          border-radius: 16px;
-          font-size: 0.95rem;
-          font-weight: 600;
-          font-family: 'Inter', sans-serif;
+          border-radius: var(--radio-lg);
+          font-size: 0.88rem;
+          font-weight: 700;
+          font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all var(--transicion);
           white-space: nowrap;
           flex-shrink: 0;
         }
         .entrada-btn.activo {
-          background: linear-gradient(135deg, #F97316, #FB923C);
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
           color: #FFFFFF;
-          box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+          box-shadow: var(--sombra-primario);
         }
         .entrada-btn.activo:hover {
-          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+          box-shadow: 0 4px 20px rgba(255, 107, 44, 0.4);
           transform: translateY(-1px);
         }
         .entrada-btn.inactivo {
-          background: #E2E8F0;
-          color: #94A3B8;
+          background: var(--color-superficie-2);
+          color: var(--color-texto-terciario);
           cursor: default;
         }
       `}</style>

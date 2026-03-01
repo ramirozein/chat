@@ -1,19 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 :root {
-  --color-primario: #F97316;
-  --color-primario-hover: #EA580C;
-  --color-primario-contenedor: #FFF7ED;
-  --color-fondo: #FFFFFF;
-  --color-superficie: #F8FAFC;
-  --color-superficie-2: #F1F5F9;
-  --color-borde: #E2E8F0;
-  --color-texto: #1E293B;
-  --color-texto-secundario: #64748B;
-  --color-acento: #FB923C;
-  --color-exito: #22C55E;
-  --color-error: #EF4444;
+  /* ── Background layers ── */
+  --color-fondo: #0B0B12;
+  --color-fondo-elevado: #101018;
+  --color-superficie: #16162A;
+  --color-superficie-2: #1E1E34;
+  --color-superficie-3: #262640;
+
+  /* ── Borders ── */
+  --color-borde: rgba(255, 255, 255, 0.06);
+  --color-borde-hover: rgba(255, 255, 255, 0.12);
+  --color-borde-activo: rgba(255, 138, 76, 0.3);
+
+  /* ── Text ── */
+  --color-texto: #F0F0F5;
+  --color-texto-secundario: #8888A0;
+  --color-texto-terciario: #5C5C72;
+
+  /* ── Primary accent (orange) ── */
+  --color-primario: #FF6B2C;
+  --color-primario-hover: #FF8F5C;
+  --color-primario-suave: rgba(255, 107, 44, 0.12);
+  --color-primario-contenedor: rgba(255, 107, 44, 0.08);
+
+  /* ── Semantic ── */
+  --color-exito: #34D399;
+  --color-error: #F87171;
+  --color-error-fondo: rgba(248, 113, 113, 0.1);
+  --color-error-borde: rgba(248, 113, 113, 0.2);
+
+  /* ── Spacing & Radius ── */
+  --radio-sm: 8px;
+  --radio-md: 12px;
+  --radio-lg: 16px;
+  --radio-xl: 20px;
+  --radio-full: 9999px;
+
+  /* ── Shadows (for dark) ── */
+  --sombra-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --sombra-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --sombra-primario: 0 4px 16px rgba(255, 107, 44, 0.25);
+
+  /* ── Transitions ── */
+  --transicion: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -24,16 +56,16 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--color-fondo);
   color: var(--color-texto);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar personalizado estilo M3 */
+/* ── Scrollbar oscuro ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -41,26 +73,57 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-borde);
-  border-radius: 3px;
+  background: var(--color-superficie-3);
+  border-radius: var(--radio-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-texto-secundario);
+  background: var(--color-texto-terciario);
 }
 
-/* Animaciones M3 */
+/* ── Animations ── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 107, 44, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(255, 107, 44, 0.35); }
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--color-primario-suave);
+  color: var(--color-texto);
+}
+
+/* ── Focus visible ── */
+:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
 }

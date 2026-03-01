@@ -62,8 +62,8 @@ export default function NavbarConversaciones({
 
   function obtenerColorAvatar(nombre: string): string {
     const colores = [
-      '#F97316', '#EF4444', '#8B5CF6', '#06B6D4',
-      '#10B981', '#F59E0B', '#EC4899', '#6366F1',
+      '#FF6B2C', '#F87171', '#A78BFA', '#22D3EE',
+      '#34D399', '#FBBF24', '#F472B6', '#818CF8',
     ]
     return colores[nombre.charCodeAt(0) % colores.length]
   }
@@ -75,43 +75,48 @@ export default function NavbarConversaciones({
           display: flex;
           flex-direction: column;
           height: 100%;
-          background: #FFFFFF;
+          background: var(--color-fondo-elevado);
         }
         .sidebar-header {
           padding: 1.25rem;
-          border-bottom: 1px solid #E2E8F0;
+          border-bottom: 1px solid var(--color-borde);
         }
         .sidebar-header-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.25rem;
         }
         .sidebar-title {
-          font-size: 1.35rem;
+          font-size: 1.25rem;
           font-weight: 700;
           margin: 0;
-          color: #1E293B;
+          color: var(--color-texto);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
-        .sidebar-title-icon {
-          background: linear-gradient(135deg, #F97316, #FB923C);
+        .sidebar-title-accent {
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          font-weight: 800;
         }
         .btn-nuevo {
-          padding: 0.5rem 1rem;
-          border: none;
-          border-radius: 12px;
-          background: #FFF7ED;
-          color: #F97316;
-          font-size: 0.85rem;
+          padding: 0.45rem 0.9rem;
+          border: 1px solid var(--color-borde);
+          border-radius: var(--radio-md);
+          background: var(--color-primario-contenedor);
+          color: var(--color-primario);
+          font-size: 0.8rem;
           font-weight: 600;
-          font-family: 'Inter', sans-serif;
+          font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: all var(--transicion);
         }
         .btn-nuevo:hover {
-          background: #FFEDD5;
+          background: var(--color-primario-suave);
+          border-color: var(--color-borde-activo);
         }
         .nuevo-form {
           display: flex;
@@ -122,38 +127,41 @@ export default function NavbarConversaciones({
         }
         .nuevo-input {
           width: 100%;
-          padding: 0.75rem 1rem;
-          border: 2px solid #E2E8F0;
-          border-radius: 12px;
-          font-size: 0.9rem;
-          font-family: 'Inter', sans-serif;
-          color: #1E293B;
-          background: #F8FAFC;
+          padding: 0.7rem 0.875rem;
+          border: 1px solid var(--color-borde);
+          border-radius: var(--radio-md);
+          font-size: 0.85rem;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          color: var(--color-texto);
+          background: var(--color-superficie);
           outline: none;
-          transition: border-color 0.2s;
+          transition: all var(--transicion);
         }
         .nuevo-input:focus {
-          border-color: #F97316;
-          background: #FFFFFF;
-          box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+          border-color: var(--color-primario);
+          box-shadow: 0 0 0 3px var(--color-primario-suave);
+        }
+        .nuevo-input::placeholder {
+          color: var(--color-texto-terciario);
         }
         .btn-crear {
-          padding: 0.65rem 1rem;
+          padding: 0.6rem 1rem;
           border: none;
-          border-radius: 10px;
-          background: linear-gradient(135deg, #F97316, #FB923C);
+          border-radius: var(--radio-md);
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
           color: #FFFFFF;
-          font-size: 0.85rem;
-          font-weight: 600;
-          font-family: 'Inter', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 700;
+          font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
-          transition: opacity 0.2s;
+          transition: all var(--transicion);
+          box-shadow: var(--sombra-primario);
         }
-        .btn-crear:hover { opacity: 0.9; }
-        .btn-crear:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-crear:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-crear:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .error-nuevo {
-          color: #DC2626;
-          font-size: 0.78rem;
+          color: var(--color-error);
+          font-size: 0.75rem;
           margin: 0;
         }
         .conversaciones-lista {
@@ -169,134 +177,140 @@ export default function NavbarConversaciones({
           height: 100%;
           text-align: center;
           padding: 2rem;
-          color: #64748B;
+          color: var(--color-texto-secundario);
         }
         .conv-vacia-icon {
           width: 64px;
           height: 64px;
-          border-radius: 16px;
-          background: #FFF7ED;
+          border-radius: var(--radio-lg);
+          background: var(--color-primario-contenedor);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 1.75rem;
           margin-bottom: 0.75rem;
+          border: 1px solid var(--color-borde);
         }
         .conv-item {
           width: 100%;
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          padding: 0.75rem;
-          border-radius: 16px;
+          padding: 0.7rem 0.75rem;
+          border-radius: var(--radio-md);
           border: none;
           cursor: pointer;
           text-align: left;
-          color: #1E293B;
-          margin-bottom: 0.25rem;
-          transition: background-color 0.15s;
-          font-family: 'Inter', sans-serif;
+          color: var(--color-texto);
+          margin-bottom: 0.15rem;
+          transition: all var(--transicion);
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          background: transparent;
         }
         .conv-item:hover {
-          background: #F1F5F9;
+          background: var(--color-superficie);
         }
         .conv-item.activa {
-          background: #FFF7ED;
+          background: var(--color-primario-contenedor);
+          border: 1px solid var(--color-borde-activo);
         }
         .conv-item.activa:hover {
-          background: #FFF7ED;
+          background: var(--color-primario-suave);
         }
         .conv-avatar {
-          width: 44px;
-          height: 44px;
-          min-width: 44px;
-          border-radius: 14px;
+          width: 42px;
+          height: 42px;
+          min-width: 42px;
+          border-radius: var(--radio-md);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.8rem;
-          font-weight: 600;
-          transition: all 0.2s;
+          font-size: 0.75rem;
+          font-weight: 700;
+          transition: all var(--transicion);
+          letter-spacing: 0.02em;
         }
         .conv-nombre {
           flex: 1;
           min-width: 0;
           font-weight: 500;
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
         .conv-item.activa .conv-nombre {
-          color: #F97316;
+          color: var(--color-primario);
           font-weight: 600;
         }
         .dot-activo {
-          width: 8px;
-          height: 8px;
+          width: 7px;
+          height: 7px;
           border-radius: 50%;
-          background: #F97316;
-          box-shadow: 0 0 6px rgba(249, 115, 22, 0.4);
+          background: var(--color-primario);
+          box-shadow: 0 0 8px rgba(255, 107, 44, 0.5);
+          animation: glowPulse 2s ease-in-out infinite;
         }
         .sidebar-footer {
-          padding: 1rem 1.25rem;
-          border-top: 1px solid #E2E8F0;
+          padding: 0.875rem 1.25rem;
+          border-top: 1px solid var(--color-borde);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background: #FAFAFA;
+          background: var(--color-fondo);
         }
         .footer-info {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.65rem;
           min-width: 0;
           flex: 1;
         }
         .footer-avatar {
-          width: 36px;
-          height: 36px;
-          min-width: 36px;
-          border-radius: 10px;
-          background: linear-gradient(135deg, #F97316, #FB923C);
+          width: 34px;
+          height: 34px;
+          min-width: 34px;
+          border-radius: var(--radio-sm);
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.7rem;
-          font-weight: 600;
+          font-size: 0.65rem;
+          font-weight: 700;
           color: #FFFFFF;
         }
         .footer-nombre {
           margin: 0;
           font-weight: 600;
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          color: #1E293B;
+          color: var(--color-texto);
         }
         .footer-email {
           margin: 0;
-          color: #64748B;
-          font-size: 0.72rem;
+          color: var(--color-texto-terciario);
+          font-size: 0.7rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
         .btn-salir {
-          padding: 0.4rem 0.85rem;
-          border: 1px solid #FECACA;
-          border-radius: 10px;
-          background: #FEF2F2;
-          color: #DC2626;
-          font-size: 0.8rem;
-          font-weight: 500;
-          font-family: 'Inter', sans-serif;
+          padding: 0.4rem 0.75rem;
+          border: 1px solid var(--color-error-borde);
+          border-radius: var(--radio-sm);
+          background: var(--color-error-fondo);
+          color: var(--color-error);
+          font-size: 0.75rem;
+          font-weight: 600;
+          font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: all var(--transicion);
         }
         .btn-salir:hover {
-          background: #FEE2E2;
+          background: rgba(248, 113, 113, 0.18);
+          border-color: rgba(248, 113, 113, 0.35);
         }
       `}</style>
 
@@ -304,7 +318,7 @@ export default function NavbarConversaciones({
         <div className="sidebar-header">
           <div className="sidebar-header-row">
             <h2 className="sidebar-title">
-              <span className="sidebar-title-icon">💬</span> Chats
+              <span className="sidebar-title-accent">💬</span> Chats
             </h2>
             <button className="btn-nuevo" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
               + Nuevo
@@ -331,10 +345,10 @@ export default function NavbarConversaciones({
           {conversaciones.length === 0 ? (
             <div className="conv-vacia">
               <div className="conv-vacia-icon">🗨️</div>
-              <p style={{ fontWeight: 500, color: '#1E293B', margin: '0 0 0.25rem' }}>
+              <p style={{ fontWeight: 600, color: 'var(--color-texto)', margin: '0 0 0.25rem' }}>
                 No tienes conversaciones
               </p>
-              <p style={{ fontSize: '0.78rem', margin: 0 }}>
+              <p style={{ fontSize: '0.75rem', margin: 0 }}>
                 Presiona &quot;+ Nuevo&quot; para chatear
               </p>
             </div>
@@ -353,8 +367,11 @@ export default function NavbarConversaciones({
                   <div
                     className="conv-avatar"
                     style={{
-                      background: activa ? `linear-gradient(135deg, ${color}, ${color}cc)` : '#F1F5F9',
-                      color: activa ? '#FFF' : '#64748B',
+                      background: activa
+                        ? `linear-gradient(135deg, ${color}, ${color}99)`
+                        : 'var(--color-superficie)',
+                      color: activa ? '#FFF' : 'var(--color-texto-secundario)',
+                      border: activa ? 'none' : '1px solid var(--color-borde)',
                     }}
                   >
                     {obtenerIniciales(nombre)}
