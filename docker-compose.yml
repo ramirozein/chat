@@ -9,7 +9,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-movie_chat}
     ports:
-      # Exponemos hacia afuera en el puerto 5422 o el especificado por DB_PORT
       - "${DB_PORT:-5422}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -21,14 +20,12 @@ services:
     depends_on:
       - db
     environment:
-      # URL interna que usará Next.js para conectarse a postgresql en su mismo docker network
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-movie_chat}?schema=public
-      # Token secreto para JWT (si lo usas) y Node env
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET:-un_secreto_muy_seguro}
       PORT: ${APP_PORT:-3003}
     ports:
-      # Exponemos hacia afuera y hacia adentro en el mismo puerto que indiques (por defecto 3003)
+      - "${APP_PORT:-3003}:${APP_PORT:-3003}"
       - "${APP_PORT:-3003}:${APP_PORT:-3003}"
 
 volumes:

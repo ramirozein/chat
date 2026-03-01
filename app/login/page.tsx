@@ -34,69 +34,77 @@ export default function PaginaLogin() {
         .login-container {
           display: flex;
           min-height: 100vh;
+          background: var(--color-fondo);
         }
         .login-branding {
           flex: 1;
-          background: linear-gradient(135deg, #F97316 0%, #FB923C 50%, #FDBA74 100%);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           padding: 3rem;
-          color: #FFFFFF;
           position: relative;
           overflow: hidden;
+          background: linear-gradient(160deg, #1A0E08 0%, #0B0B12 40%, #16162A 100%);
         }
-        .login-branding::before {
-          content: '';
+        .branding-glow {
           position: absolute;
-          top: -50%;
-          right: -50%;
-          width: 100%;
-          height: 100%;
-          background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+          width: 500px;
+          height: 500px;
           border-radius: 50%;
+          filter: blur(120px);
+          opacity: 0.15;
+          pointer-events: none;
         }
-        .login-branding::after {
-          content: '';
-          position: absolute;
-          bottom: -30%;
-          left: -30%;
-          width: 80%;
-          height: 80%;
-          background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-          border-radius: 50%;
+        .glow-1 {
+          top: -15%;
+          right: -10%;
+          background: #FF6B2C;
+        }
+        .glow-2 {
+          bottom: -20%;
+          left: -10%;
+          background: #FF8F5C;
+          opacity: 0.08;
         }
         .branding-content {
           position: relative;
           z-index: 1;
           text-align: center;
           max-width: 400px;
+          animation: slideUp 0.7s ease-out;
         }
         .branding-icon {
           width: 80px;
           height: 80px;
-          background: rgba(255,255,255,0.2);
-          backdrop-filter: blur(10px);
-          border-radius: 24px;
+          background: var(--color-primario-suave);
+          border-radius: var(--radio-xl);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 2.5rem;
           margin: 0 auto 2rem;
-          border: 1px solid rgba(255,255,255,0.3);
+          border: 1px solid var(--color-borde-activo);
+          animation: gentleFloat 3s ease-in-out infinite;
         }
         .branding-title {
           font-size: 2.5rem;
-          font-weight: 700;
+          font-weight: 800;
           margin: 0 0 1rem;
-          line-height: 1.2;
+          line-height: 1.15;
+          color: var(--color-texto);
+          letter-spacing: -0.02em;
+        }
+        .branding-title span {
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
         .branding-subtitle {
-          font-size: 1.1rem;
-          opacity: 0.9;
+          font-size: 1.05rem;
+          color: var(--color-texto-secundario);
           margin: 0;
-          line-height: 1.6;
+          line-height: 1.7;
         }
         .login-form-side {
           flex: 1;
@@ -104,107 +112,114 @@ export default function PaginaLogin() {
           align-items: center;
           justify-content: center;
           padding: 3rem;
-          background: #FFFFFF;
+          background: var(--color-fondo-elevado);
+          border-left: 1px solid var(--color-borde);
         }
         .login-form-wrapper {
           width: 100%;
           max-width: 420px;
-          animation: slideUp 0.5s ease-out;
+          animation: slideUp 0.6s ease-out;
         }
         .login-form-title {
-          font-size: 2rem;
+          font-size: 1.85rem;
           font-weight: 700;
-          color: #1E293B;
+          color: var(--color-texto);
           margin: 0 0 0.5rem;
+          letter-spacing: -0.01em;
         }
         .login-form-desc {
-          font-size: 1rem;
-          color: #64748B;
+          font-size: 0.95rem;
+          color: var(--color-texto-secundario);
           margin: 0 0 2.5rem;
         }
         .form-group {
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.25rem;
         }
         .form-label {
           display: block;
-          font-size: 0.875rem;
+          font-size: 0.8rem;
           font-weight: 600;
-          color: #1E293B;
+          color: var(--color-texto-secundario);
           margin-bottom: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
         }
         .form-input {
           width: 100%;
           padding: 0.875rem 1rem;
-          border: 2px solid #E2E8F0;
-          border-radius: 14px;
-          font-size: 1rem;
-          font-family: 'Inter', sans-serif;
-          color: #1E293B;
-          background: #F8FAFC;
+          border: 1px solid var(--color-borde);
+          border-radius: var(--radio-md);
+          font-size: 0.95rem;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          color: var(--color-texto);
+          background: var(--color-superficie);
           outline: none;
-          transition: all 0.2s ease;
+          transition: all var(--transicion);
         }
         .form-input::placeholder {
-          color: #94A3B8;
+          color: var(--color-texto-terciario);
         }
         .form-input:hover {
-          border-color: #FDBA74;
+          border-color: var(--color-borde-hover);
         }
         .form-input:focus {
-          border-color: #F97316;
-          background: #FFFFFF;
-          box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+          border-color: var(--color-primario);
+          background: var(--color-superficie-2);
+          box-shadow: 0 0 0 3px var(--color-primario-suave);
         }
         .form-error {
           padding: 0.875rem 1rem;
-          border-radius: 12px;
-          background: #FEF2F2;
-          border: 1px solid #FECACA;
-          color: #DC2626;
-          font-size: 0.875rem;
+          border-radius: var(--radio-md);
+          background: var(--color-error-fondo);
+          border: 1px solid var(--color-error-borde);
+          color: var(--color-error);
+          font-size: 0.85rem;
           text-align: center;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.25rem;
+          animation: fadeIn 0.2s ease-out;
         }
         .form-button {
           width: 100%;
-          padding: 1rem;
+          padding: 0.9rem;
           border: none;
-          border-radius: 14px;
-          background: linear-gradient(135deg, #F97316, #FB923C);
+          border-radius: var(--radio-md);
+          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
           color: #FFFFFF;
-          font-size: 1rem;
-          font-weight: 600;
-          font-family: 'Inter', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 700;
+          font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
-          transition: all 0.2s ease;
-          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
-          margin-top: 0.5rem;
+          transition: all var(--transicion);
+          box-shadow: var(--sombra-primario);
+          margin-top: 0.75rem;
+          letter-spacing: 0.01em;
         }
         .form-button:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 24px rgba(255, 107, 44, 0.35);
         }
         .form-button:active {
           transform: translateY(0);
         }
         .form-button:disabled {
-          opacity: 0.7;
+          opacity: 0.6;
           cursor: not-allowed;
           transform: none;
         }
         .form-footer {
           text-align: center;
           margin-top: 2rem;
-          font-size: 0.9rem;
-          color: #64748B;
+          font-size: 0.875rem;
+          color: var(--color-texto-secundario);
         }
         .form-footer a {
-          color: #F97316;
+          color: var(--color-primario);
           font-weight: 600;
           text-decoration: none;
+          transition: color var(--transicion);
         }
         .form-footer a:hover {
-          text-decoration: underline;
+          color: var(--color-primario-hover);
         }
         @media (max-width: 768px) {
           .login-container {
@@ -218,7 +233,7 @@ export default function PaginaLogin() {
             font-size: 1.75rem;
           }
           .branding-subtitle {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
           }
           .branding-icon {
             width: 60px;
@@ -228,9 +243,11 @@ export default function PaginaLogin() {
           }
           .login-form-side {
             padding: 2rem 1.5rem;
+            border-left: none;
+            border-top: 1px solid var(--color-borde);
           }
           .login-form-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
           }
           .login-form-desc {
             margin-bottom: 1.5rem;
@@ -239,18 +256,18 @@ export default function PaginaLogin() {
       `}</style>
 
       <div className="login-container">
-        {/* Lado branding */}
         <div className="login-branding">
+          <div className="branding-glow glow-1" />
+          <div className="branding-glow glow-2" />
           <div className="branding-content">
             <div className="branding-icon">💬</div>
-            <h1 className="branding-title">Bienvenido de vuelta</h1>
+            <h1 className="branding-title">Bienvenido <span>de vuelta</span></h1>
             <p className="branding-subtitle">
               Conéctate con tus amigos y compañeros en tiempo real con mensajes cifrados de extremo a extremo.
             </p>
           </div>
         </div>
 
-        {/* Lado formulario */}
         <div className="login-form-side">
           <div className="login-form-wrapper">
             <h2 className="login-form-title">Iniciar Sesión</h2>

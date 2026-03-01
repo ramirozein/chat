@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contextos/AuthContexto'
-import { Spinner } from '@heroui/react'
 
 export default function PaginaInicio() {
   const { usuario, cargando } = useAuth()
@@ -16,13 +15,27 @@ export default function PaginaInicio() {
   }, [usuario, cargando, router])
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-    }}>
-      <Spinner size="lg" color="primary" />
-    </div>
+    <>
+      <style jsx>{`
+        .loading-page {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          background: var(--color-fondo);
+        }
+        .spinner-ring {
+          width: 40px;
+          height: 40px;
+          border: 3px solid var(--color-superficie-3);
+          border-top-color: var(--color-primario);
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+        }
+      `}</style>
+      <div className="loading-page">
+        <div className="spinner-ring" />
+      </div>
+    </>
   )
 }

@@ -34,7 +34,6 @@ export default function PaginaChat() {
   const [sidebarAbierto, setSidebarAbierto] = useState(false)
   const [token, setToken] = useState<string | null>(null)
 
-  // Obtener token para Socket.IO
   useEffect(() => {
     async function obtenerToken() {
       try {
@@ -52,7 +51,6 @@ export default function PaginaChat() {
 
   const manejarNuevoMensaje = useCallback((mensaje: Mensaje) => {
     setMensajes(prev => {
-      // Evitar duplicados
       if (prev.some(m => m.id === mensaje.id)) return prev
       return [...prev, mensaje]
     })
@@ -63,14 +61,12 @@ export default function PaginaChat() {
     onNuevoMensaje: manejarNuevoMensaje,
   })
 
-  // Cargar conversaciones
   useEffect(() => {
     if (usuario) {
       cargarConversaciones()
     }
   }, [usuario])
 
-  // Unirse a la sala cuando cambia la conversación activa
   useEffect(() => {
     if (conversacionActiva) {
       unirseConversacion(conversacionActiva)
@@ -152,18 +148,15 @@ export default function PaginaChat() {
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #FFFFFF;
+            background: var(--color-fondo);
           }
           .spinner-ring {
             width: 40px;
             height: 40px;
-            border: 4px solid #FFEDD5;
-            border-top-color: #F97316;
+            border: 3px solid var(--color-superficie-3);
+            border-top-color: var(--color-primario);
             border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-          }
-          @keyframes spin {
-            to { transform: rotate(360deg); }
+            animation: spin 0.7s linear infinite;
           }
         `}</style>
         <div className="spinner-page">
@@ -179,6 +172,7 @@ export default function PaginaChat() {
       height: '100vh',
       overflow: 'hidden',
       position: 'relative',
+      background: 'var(--color-fondo)',
     }}>
       {/* Overlay para móvil cuando sidebar está abierto */}
       {sidebarAbierto && (
@@ -187,9 +181,8 @@ export default function PaginaChat() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.3)',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
             zIndex: 40,
-            display: 'none',
             backdropFilter: 'blur(4px)',
           }}
           className="overlay-movil"
@@ -202,13 +195,12 @@ export default function PaginaChat() {
           width: '320px',
           minWidth: '320px',
           height: '100vh',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--color-fondo-elevado)',
           borderRight: '1px solid var(--color-borde)',
           display: 'flex',
           flexDirection: 'column',
           transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           zIndex: 50,
-          boxShadow: '2px 0 8px rgba(0, 0, 0, 0.04)',
         }}
         className={`sidebar ${sidebarAbierto ? 'sidebar-abierto' : ''}`}
       >
@@ -240,13 +232,18 @@ export default function PaginaChat() {
             position: fixed !important;
             left: 0;
             top: 0;
+            max-width: 85vw;
             transform: translateX(-100%);
+            box-shadow: none;
           }
           .sidebar-abierto {
             transform: translateX(0) !important;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
           }
+        }
+        @media (min-width: 769px) {
           .overlay-movil {
-            display: block !important;
+            display: none !important;
           }
         }
       `}</style>
