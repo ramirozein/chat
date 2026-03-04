@@ -5,6 +5,7 @@ import { useAuth } from '@/contextos/AuthContexto'
 import { useSocket } from '@/hooks/useSocket'
 import NavbarConversaciones from '@/componentes/NavbarConversaciones'
 import AreaChat from '@/componentes/AreaChat'
+import { esConversacionBot } from '@/lib/utils-ui'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string }
@@ -34,6 +35,10 @@ export default function PaginaChat() {
   const [sidebarAbierto, setSidebarAbierto] = useState(false)
   const [token, setToken] = useState<string | null>(null)
 
+  // Estado del chatbot
+  const [botEscribiendo, setBotEscribiendo] = useState(false)
+  const [mensajeParcial, setMensajeParcial] = useState('')
+
   useEffect(() => {
     async function obtenerToken() {
       try {
@@ -56,9 +61,32 @@ export default function PaginaChat() {
     })
   }, [])
 
+  const manejarChatbotEscribiendo = useCallback((escribiendo: boolean) => {
+    setBotEscribiendo(escribiendo)
+    if (escribiendo) {
+      setMensajeParcial('')
+    }
+  }, [])
+
+  const manejarChatbotToken = useCallback((datos: { conversacionId: string; token: string; acumulado: string }) => {
+    setMensajeParcial(datos.acumulado)
+  }, [])
+
+  const manejarChatbotMensajeFinal = useCallback((mensaje: Mensaje) => {
+    setMensajeParcial('')
+    setBotEscribiendo(false)
+    setMensajes(prev => {
+      if (prev.some(m => m.id === mensaje.id)) return prev
+      return [...prev, mensaje]
+    })
+  }, [])
+
   const { unirseConversacion, salirConversacion, enviarMensaje } = useSocket({
     token,
     onNuevoMensaje: manejarNuevoMensaje,
+    onChatbotEscribiendo: manejarChatbotEscribiendo,
+    onChatbotToken: manejarChatbotToken,
+    onChatbotMensajeFinal: manejarChatbotMensajeFinal,
   })
 
   useEffect(() => {
@@ -71,6 +99,9 @@ export default function PaginaChat() {
     if (conversacionActiva) {
       unirseConversacion(conversacionActiva)
       cargarMensajes(conversacionActiva)
+      // Limpiar estado del bot al cambiar de conversación
+      setBotEscribiendo(false)
+      setMensajeParcial('')
 
       return () => {
         salirConversacion(conversacionActiva)
@@ -128,6 +159,25 @@ export default function PaginaChat() {
     }
   }
 
+  async function crearChatbot() {
+    try {
+      const res = await fetch('/api/conversaciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ esChatbot: true }),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        await cargarConversaciones()
+        setConversacionActiva(data.conversacion.id)
+        setSidebarAbierto(false)
+      }
+    } catch {
+      console.error('Error al crear chatbot')
+    }
+  }
+
   function manejarEnviarMensaje(contenido: string) {
     if (conversacionActiva && contenido.trim()) {
       enviarMensaje(conversacionActiva, contenido.trim())
@@ -138,6 +188,11 @@ export default function PaginaChat() {
     setConversacionActiva(id)
     setSidebarAbierto(false)
   }
+
+  const convActiva = conversaciones.find(c => c.id === conversacionActiva) || null
+  const esChatbot = convActiva
+    ? esConversacionBot(convActiva.participantes)
+    : false
 
   if (cargando) {
     return (
@@ -210,6 +265,7 @@ export default function PaginaChat() {
           usuarioActual={usuario}
           onSeleccionar={seleccionarConversacion}
           onCrear={crearConversacion}
+          onCrearChatbot={crearChatbot}
           onLogout={logout}
         />
       </div>
@@ -217,12 +273,15 @@ export default function PaginaChat() {
       {/* Área principal del chat */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <AreaChat
-          conversacion={conversaciones.find(c => c.id === conversacionActiva) || null}
+          conversacion={convActiva}
           mensajes={mensajes}
           cargandoMensajes={cargandoMensajes}
           usuarioActual={usuario}
           onEnviarMensaje={manejarEnviarMensaje}
           onAbrirSidebar={() => setSidebarAbierto(true)}
+          esChatbot={esChatbot}
+          escribiendo={botEscribiendo}
+          mensajeParcial={mensajeParcial}
         />
       </div>
 

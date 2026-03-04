@@ -1,5 +1,7 @@
 'use client'
 
+import ContenidoMarkdown from './ContenidoMarkdown'
+
 interface Props {
   contenido: string
   autor: string
@@ -38,9 +40,9 @@ export default function BurbujaMensaje({ contenido, autor, esMio, hora }: Props)
             {autor}
           </p>
         )}
-        <p style={{ margin: 0, fontSize: '0.88rem', lineHeight: '1.55' }}>
-          {contenido}
-        </p>
+        <div style={{ margin: 0, fontSize: '0.88rem', lineHeight: '1.55' }}>
+          <ContenidoMarkdown contenido={contenido} />
+        </div>
         <p style={{
           margin: '0.3rem 0 0 0',
           fontSize: '0.62rem',

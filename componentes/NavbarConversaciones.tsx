@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { obtenerIniciales, obtenerColorAvatar, esConversacionBot } from '@/lib/utils-ui'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string }
@@ -17,8 +18,10 @@ interface Props {
   usuarioActual: { id: string; nombre: string; email: string } | null
   onSeleccionar: (id: string) => void
   onCrear: (email: string) => Promise<{ ok: boolean; error?: string }>
+  onCrearChatbot: () => Promise<void>
   onLogout: () => void
 }
+
 
 export default function NavbarConversaciones({
   conversaciones,
@@ -26,6 +29,7 @@ export default function NavbarConversaciones({
   usuarioActual,
   onSeleccionar,
   onCrear,
+  onCrearChatbot,
   onLogout,
 }: Props) {
   const [emailNuevo, setEmailNuevo] = useState('')
@@ -49,24 +53,7 @@ export default function NavbarConversaciones({
     setCreando(false)
   }
 
-  function obtenerNombreContacto(conversacion: Conversacion): string {
-    const otro = conversacion.participantes.find(
-      p => p.usuario.id !== usuarioActual?.id
-    )
-    return otro?.usuario.nombre || 'Desconocido'
-  }
 
-  function obtenerIniciales(nombre: string): string {
-    return nombre.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-  }
-
-  function obtenerColorAvatar(nombre: string): string {
-    const colores = [
-      '#FF6B2C', '#F87171', '#A78BFA', '#22D3EE',
-      '#34D399', '#FBBF24', '#F472B6', '#818CF8',
-    ]
-    return colores[nombre.charCodeAt(0) % colores.length]
-  }
 
   return (
     <>
@@ -102,6 +89,10 @@ export default function NavbarConversaciones({
           -webkit-text-fill-color: transparent;
           font-weight: 800;
         }
+        .sidebar-header-btns {
+          display: flex;
+          gap: 0.4rem;
+        }
         .btn-nuevo {
           padding: 0.45rem 0.9rem;
           border: 1px solid var(--color-borde);
@@ -117,6 +108,22 @@ export default function NavbarConversaciones({
         .btn-nuevo:hover {
           background: var(--color-primario-suave);
           border-color: var(--color-borde-activo);
+        }
+        .btn-chatbot {
+          padding: 0.45rem 0.9rem;
+          border: 1px solid rgba(139, 92, 246, 0.25);
+          border-radius: var(--radio-md);
+          background: rgba(139, 92, 246, 0.08);
+          color: #8B5CF6;
+          font-size: 0.8rem;
+          font-weight: 600;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          cursor: pointer;
+          transition: all var(--transicion);
+        }
+        .btn-chatbot:hover {
+          background: rgba(139, 92, 246, 0.15);
+          border-color: rgba(139, 92, 246, 0.4);
         }
         .nuevo-form {
           display: flex;
@@ -320,9 +327,14 @@ export default function NavbarConversaciones({
             <h2 className="sidebar-title">
               <span className="sidebar-title-accent">💬</span> Chats
             </h2>
-            <button className="btn-nuevo" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
-              + Nuevo
-            </button>
+            <div className="sidebar-header-btns">
+              <button className="btn-chatbot" onClick={onCrearChatbot}>
+                🤖 IA
+              </button>
+              <button className="btn-nuevo" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
+                + Nuevo
+              </button>
+            </div>
           </div>
 
           {mostrarFormulario && (
@@ -354,9 +366,11 @@ export default function NavbarConversaciones({
             </div>
           ) : (
             conversaciones.map(conv => {
-              const nombre = obtenerNombreContacto(conv)
+              const otro = conv.participantes.find(p => p.usuario.id !== usuarioActual?.id)
+              const nombre = otro?.usuario.nombre || 'Desconocido'
               const activa = conv.id === conversacionActiva
               const color = obtenerColorAvatar(nombre)
+              const esBot = esConversacionBot(conv.participantes)
 
               return (
                 <button
@@ -367,16 +381,19 @@ export default function NavbarConversaciones({
                   <div
                     className="conv-avatar"
                     style={{
-                      background: activa
-                        ? `linear-gradient(135deg, ${color}, ${color}99)`
-                        : 'var(--color-superficie)',
-                      color: activa ? '#FFF' : 'var(--color-texto-secundario)',
-                      border: activa ? 'none' : '1px solid var(--color-borde)',
+                      background: esBot
+                        ? (activa ? 'linear-gradient(135deg, #8B5CF6, #A78BFA)' : 'rgba(139, 92, 246, 0.1)')
+                        : (activa
+                          ? `linear-gradient(135deg, ${color}, ${color}99)`
+                          : 'var(--color-superficie)'),
+                      color: activa ? '#FFF' : (esBot ? '#8B5CF6' : 'var(--color-texto-secundario)'),
+                      border: activa ? 'none' : (esBot ? '1px solid rgba(139, 92, 246, 0.25)' : '1px solid var(--color-borde)'),
+                      fontSize: esBot ? '1.1rem' : undefined,
                     }}
                   >
-                    {obtenerIniciales(nombre)}
+                    {esBot ? '🤖' : obtenerIniciales(nombre)}
                   </div>
-                  <span className="conv-nombre">{nombre}</span>
+                  <span className="conv-nombre">{esBot ? 'ChatBot IA' : nombre}</span>
                   {activa && <span className="dot-activo" />}
                 </button>
               )
