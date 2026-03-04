@@ -12,19 +12,43 @@ interface MensajeSocket {
   creadoEn: string
 }
 
+interface TokenChatbot {
+  conversacionId: string
+  token: string
+  acumulado: string
+}
+
 interface UseSocketOpciones {
   token: string | null
   onNuevoMensaje: (mensaje: MensajeSocket) => void
+  onChatbotEscribiendo?: (escribiendo: boolean) => void
+  onChatbotToken?: (datos: TokenChatbot) => void
+  onChatbotMensajeFinal?: (mensaje: MensajeSocket) => void
 }
 
-export function useSocket({ token, onNuevoMensaje }: UseSocketOpciones) {
+export function useSocket({ token, onNuevoMensaje, onChatbotEscribiendo, onChatbotToken, onChatbotMensajeFinal }: UseSocketOpciones) {
   const socketRef = useRef<Socket | null>(null)
   const callbackRef = useRef(onNuevoMensaje)
+  const cbEscribiendoRef = useRef(onChatbotEscribiendo)
+  const cbTokenRef = useRef(onChatbotToken)
+  const cbFinalRef = useRef(onChatbotMensajeFinal)
 
-  // Mantener referencia actualizada del callback
+  // Mantener referencias actualizadas de los callbacks
   useEffect(() => {
     callbackRef.current = onNuevoMensaje
   }, [onNuevoMensaje])
+
+  useEffect(() => {
+    cbEscribiendoRef.current = onChatbotEscribiendo
+  }, [onChatbotEscribiendo])
+
+  useEffect(() => {
+    cbTokenRef.current = onChatbotToken
+  }, [onChatbotToken])
+
+  useEffect(() => {
+    cbFinalRef.current = onChatbotMensajeFinal
+  }, [onChatbotMensajeFinal])
 
   // Conectar socket
   useEffect(() => {
@@ -36,6 +60,18 @@ export function useSocket({ token, onNuevoMensaje }: UseSocketOpciones) {
 
     socket.on('nuevo-mensaje', (mensaje: MensajeSocket) => {
       callbackRef.current(mensaje)
+    })
+
+    socket.on('chatbot-escribiendo', (escribiendo: boolean) => {
+      cbEscribiendoRef.current?.(escribiendo)
+    })
+
+    socket.on('chatbot-token', (datos: TokenChatbot) => {
+      cbTokenRef.current?.(datos)
+    })
+
+    socket.on('chatbot-mensaje-final', (mensaje: MensajeSocket) => {
+      cbFinalRef.current?.(mensaje)
     })
 
     socket.on('connect_error', (error) => {

@@ -2,6 +2,8 @@
 
 import { useRef, useEffect } from 'react'
 import BurbujaMensaje from './BurbujaMensaje'
+import BurbujaEscribiendo from './BurbujaEscribiendo'
+import ContenidoMarkdown from './ContenidoMarkdown'
 import EntradaMensaje from './EntradaMensaje'
 
 interface Participante {
@@ -29,6 +31,9 @@ interface Props {
   usuarioActual: { id: string; nombre: string; email: string } | null
   onEnviarMensaje: (contenido: string) => void
   onAbrirSidebar: () => void
+  esChatbot?: boolean
+  escribiendo?: boolean
+  mensajeParcial?: string
 }
 
 export default function AreaChat({
@@ -38,6 +43,9 @@ export default function AreaChat({
   usuarioActual,
   onEnviarMensaje,
   onAbrirSidebar,
+  esChatbot = false,
+  escribiendo = false,
+  mensajeParcial = '',
 }: Props) {
   const refFinal = useRef<HTMLDivElement>(null)
 
@@ -170,6 +178,54 @@ export default function AreaChat({
           color: #FFFFFF;
           box-shadow: 0 2px 8px rgba(255, 107, 44, 0.2);
         }
+        .header-avatar.bot {
+          background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+          font-size: 1.15rem;
+        }
+        .estado-bot {
+          color: #8B5CF6 !important;
+        }
+        .streaming-burbuja {
+          display: flex;
+          justify-content: flex-start;
+          margin-bottom: 0.2rem;
+          animation: fadeIn 0.2s ease-out;
+        }
+        .streaming-contenido {
+          max-width: 75%;
+          padding: 0.7rem 1rem;
+          border-radius: 16px 16px 16px 4px;
+          background: var(--color-superficie);
+          color: var(--color-texto);
+          word-break: break-word;
+          box-shadow: var(--sombra-sm);
+          border: 1px solid var(--color-borde);
+        }
+        .streaming-nombre {
+          margin: 0 0 0.2rem 0;
+          font-size: 0.7rem;
+          font-weight: 700;
+          color: #8B5CF6;
+          letter-spacing: 0.02em;
+        }
+        .streaming-texto {
+          margin: 0;
+          font-size: 0.88rem;
+          line-height: 1.55;
+        }
+        .cursor-parpadeo {
+          display: inline-block;
+          width: 2px;
+          height: 1em;
+          background: var(--color-primario);
+          margin-left: 2px;
+          vertical-align: text-bottom;
+          animation: blink 0.8s step-end infinite;
+        }
+        @keyframes blink {
+          50% { opacity: 0; }
+        }
         .header-nombre {
           margin: 0;
           font-weight: 600;
@@ -260,14 +316,14 @@ export default function AreaChat({
           <div className="btn-menu-chat">
             <button className="btn-menu-icono" onClick={onAbrirSidebar}>☰</button>
           </div>
-          <div className="header-avatar">
-            {nombreContacto ? obtenerIniciales(nombreContacto) : '?'}
+          <div className={`header-avatar${esChatbot ? ' bot' : ''}`}>
+            {esChatbot ? '🤖' : (nombreContacto ? obtenerIniciales(nombreContacto) : '?')}
           </div>
           <div>
-            <p className="header-nombre">{nombreContacto}</p>
-            <p className="header-estado">
-              <span className="online-dot" />
-              En línea
+            <p className="header-nombre">{esChatbot ? 'ChatBot IA' : nombreContacto}</p>
+            <p className={`header-estado${esChatbot ? ' estado-bot' : ''}`}>
+              <span className="online-dot" style={esChatbot ? { background: '#8B5CF6', boxShadow: '0 0 6px rgba(139, 92, 246, 0.5)' } : undefined} />
+              {esChatbot ? 'IA' : 'En línea'}
             </p>
           </div>
         </div>
@@ -296,6 +352,20 @@ export default function AreaChat({
               />
             ))
           )}
+          {/* Burbuja de streaming del bot */}
+          {esChatbot && mensajeParcial && (
+            <div className="streaming-burbuja">
+              <div className="streaming-contenido">
+                <p className="streaming-nombre">ChatBot IA</p>
+                <div className="streaming-texto">
+                  <ContenidoMarkdown contenido={mensajeParcial} />
+                  <span className="cursor-parpadeo" />
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Indicador de escritura */}
+          {esChatbot && escribiendo && !mensajeParcial && <BurbujaEscribiendo />}
           <div ref={refFinal} />
         </div>
 

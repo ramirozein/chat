@@ -2,6 +2,7 @@ import { createServer } from 'http'
 import next from 'next'
 import { Server } from 'socket.io'
 import jwt from 'jsonwebtoken'
+import OpenAI from 'openai'
 import { cifrarMensaje, descifrarMensaje } from './lib/cifrado'
 import { prisma } from './lib/prisma'
 
@@ -10,6 +11,11 @@ const app = next({ dev })
 const handler = app.getRequestHandler()
 
 const JWT_SECRET = process.env.JWT_SECRET || 'clave-secreta-por-defecto'
+const BOT_EMAIL = 'bot@chatbot.ia'
+
+const openai = new OpenAI({
+  apiKey: process.env.API_KEY,
+})
 
 interface PayloadToken {
   usuarioId: string
@@ -93,6 +99,109 @@ app.prepare().then(() => {
           conversacionId: mensaje.conversacionId,
           creadoEn: mensaje.creadoEn,
         })
+
+        // Verificar si la conversación es con el chatbot
+        const participantes = await prisma.participanteConversacion.findMany({
+          where: { conversacionId },
+          include: {
+            usuario: { select: { id: true, nombre: true, email: true } },
+          },
+        })
+
+        const botParticipante = participantes.find(p => p.usuario.email === BOT_EMAIL)
+
+        if (botParticipante) {
+          // Obtener historial de mensajes (últimos 20) para contexto
+          const historial = await prisma.mensaje.findMany({
+            where: { conversacionId },
+            orderBy: { creadoEn: 'asc' },
+            take: 20,
+            include: {
+              autor: { select: { id: true, nombre: true, email: true } },
+            },
+          })
+
+          const mensajesOpenAI: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
+            {
+              role: 'system',
+              content: 'Eres un asistente amigable y útil. Responde de forma concisa y clara en español. Puedes usar emojis ocasionalmente para hacer la conversación más amena.',
+            },
+          ]
+
+          for (const msg of historial) {
+            const textoDescifrado = descifrarMensaje(msg.contenido, msg.iv)
+            if (msg.autor.email === BOT_EMAIL) {
+              mensajesOpenAI.push({ role: 'assistant', content: textoDescifrado })
+            } else {
+              mensajesOpenAI.push({ role: 'user', content: textoDescifrado })
+            }
+          }
+
+          // Emitir indicador de escritura
+          io.to(conversacionId).emit('chatbot-escribiendo', true)
+
+          try {
+            const stream = await openai.chat.completions.create({
+              model: 'gpt-4o-mini',
+              messages: mensajesOpenAI,
+              stream: true,
+            })
+
+            let respuestaCompleta = ''
+
+            for await (const chunk of stream) {
+              const token = chunk.choices[0]?.delta?.content || ''
+              if (token) {
+                respuestaCompleta += token
+                io.to(conversacionId).emit('chatbot-token', {
+                  conversacionId,
+                  token,
+                  acumulado: respuestaCompleta,
+                })
+              }
+            }
+
+            // Guardar respuesta completa del bot
+            if (respuestaCompleta.trim()) {
+              const { contenido: contenidoBotCifrado, iv: ivBot } = cifrarMensaje(respuestaCompleta)
+
+              const mensajeBot = await prisma.mensaje.create({
+                data: {
+                  contenido: contenidoBotCifrado,
+                  iv: ivBot,
+                  autorId: botParticipante.usuario.id,
+                  conversacionId,
+                },
+                include: {
+                  autor: { select: { id: true, nombre: true } },
+                },
+              })
+
+              await prisma.conversacion.update({
+                where: { id: conversacionId },
+                data: { actualizadoEn: new Date() },
+              })
+
+              // Emitir mensaje final completo del bot
+              io.to(conversacionId).emit('chatbot-mensaje-final', {
+                id: mensajeBot.id,
+                contenido: respuestaCompleta,
+                autorId: mensajeBot.autorId,
+                autor: mensajeBot.autor,
+                conversacionId: mensajeBot.conversacionId,
+                creadoEn: mensajeBot.creadoEn,
+              })
+            }
+          } catch (error) {
+            console.error('Error al obtener respuesta del chatbot:', error)
+            io.to(conversacionId).emit('chatbot-error', {
+              conversacionId,
+              error: 'No se pudo obtener respuesta del chatbot',
+            })
+          } finally {
+            io.to(conversacionId).emit('chatbot-escribiendo', false)
+          }
+        }
       } catch (error) {
         console.error('Error al enviar mensaje:', error)
         socket.emit('error-mensaje', { error: 'No se pudo enviar el mensaje' })

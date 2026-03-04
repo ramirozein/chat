@@ -55,19 +55,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Token inválido' }, { status: 401 })
     }
 
-    const { emailDestino } = await request.json()
+    const body = await request.json()
+    const { emailDestino, esChatbot } = body
 
-    if (!emailDestino) {
-      return NextResponse.json({ error: 'El email del destinatario es requerido' }, { status: 400 })
-    }
+    let destinatario
 
-    // Buscar usuario destinatario
-    const destinatario = await prisma.usuario.findUnique({
-      where: { email: emailDestino },
-    })
+    if (esChatbot) {
+      // Buscar usuario bot
+      destinatario = await prisma.usuario.findUnique({
+        where: { email: 'bot@chatbot.ia' },
+      })
 
-    if (!destinatario) {
-      return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 })
+      if (!destinatario) {
+        return NextResponse.json({ error: 'El chatbot no está configurado. Ejecuta el seed del bot.' }, { status: 404 })
+      }
+    } else {
+      if (!emailDestino) {
+        return NextResponse.json({ error: 'El email del destinatario es requerido' }, { status: 400 })
+      }
+
+      // Buscar usuario destinatario
+      destinatario = await prisma.usuario.findUnique({
+        where: { email: emailDestino },
+      })
+
+      if (!destinatario) {
+        return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 })
+      }
     }
 
     if (destinatario.id === payload.usuarioId) {
