@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { obtenerIniciales, obtenerColorAvatar, esConversacionBot } from '@/lib/utils-ui'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string }
@@ -21,7 +22,6 @@ interface Props {
   onLogout: () => void
 }
 
-const BOT_EMAIL = 'bot@chatbot.ia'
 
 export default function NavbarConversaciones({
   conversaciones,
@@ -53,28 +53,7 @@ export default function NavbarConversaciones({
     setCreando(false)
   }
 
-  function obtenerNombreContacto(conversacion: Conversacion): string {
-    const otro = conversacion.participantes.find(
-      p => p.usuario.id !== usuarioActual?.id
-    )
-    return otro?.usuario.nombre || 'Desconocido'
-  }
 
-  function esConversacionBot(conversacion: Conversacion): boolean {
-    return conversacion.participantes.some(p => p.usuario.email === BOT_EMAIL)
-  }
-
-  function obtenerIniciales(nombre: string): string {
-    return nombre.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-  }
-
-  function obtenerColorAvatar(nombre: string): string {
-    const colores = [
-      '#FF6B2C', '#F87171', '#A78BFA', '#22D3EE',
-      '#34D399', '#FBBF24', '#F472B6', '#818CF8',
-    ]
-    return colores[nombre.charCodeAt(0) % colores.length]
-  }
 
   return (
     <>
@@ -387,10 +366,11 @@ export default function NavbarConversaciones({
             </div>
           ) : (
             conversaciones.map(conv => {
-              const nombre = obtenerNombreContacto(conv)
+              const otro = conv.participantes.find(p => p.usuario.id !== usuarioActual?.id)
+              const nombre = otro?.usuario.nombre || 'Desconocido'
               const activa = conv.id === conversacionActiva
               const color = obtenerColorAvatar(nombre)
-              const esBot = esConversacionBot(conv)
+              const esBot = esConversacionBot(conv.participantes)
 
               return (
                 <button

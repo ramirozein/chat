@@ -5,6 +5,7 @@ import BurbujaMensaje from './BurbujaMensaje'
 import BurbujaEscribiendo from './BurbujaEscribiendo'
 import ContenidoMarkdown from './ContenidoMarkdown'
 import EntradaMensaje from './EntradaMensaje'
+import { obtenerIniciales } from '@/lib/utils-ui'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string }
@@ -57,9 +58,7 @@ export default function AreaChat({
     ? conversacion.participantes.find(p => p.usuario.id !== usuarioActual?.id)?.usuario.nombre || 'Chat'
     : null
 
-  function obtenerIniciales(nombre: string): string {
-    return nombre.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-  }
+
 
   // Estado vacío
   if (!conversacion) {

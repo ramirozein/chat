@@ -5,8 +5,7 @@ import { useAuth } from '@/contextos/AuthContexto'
 import { useSocket } from '@/hooks/useSocket'
 import NavbarConversaciones from '@/componentes/NavbarConversaciones'
 import AreaChat from '@/componentes/AreaChat'
-
-const BOT_EMAIL = 'bot@chatbot.ia'
+import { esConversacionBot } from '@/lib/utils-ui'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string }
@@ -190,10 +189,9 @@ export default function PaginaChat() {
     setSidebarAbierto(false)
   }
 
-  // Detectar si la conversación activa es con el bot
   const convActiva = conversaciones.find(c => c.id === conversacionActiva) || null
   const esChatbot = convActiva
-    ? convActiva.participantes.some(p => p.usuario.email === BOT_EMAIL)
+    ? esConversacionBot(convActiva.participantes)
     : false
 
   if (cargando) {
