@@ -13,9 +13,17 @@ const handler = app.getRequestHandler()
 const JWT_SECRET = process.env.JWT_SECRET || 'clave-secreta-por-defecto'
 const BOT_EMAIL = 'bot@chatbot.ia'
 
-const openai = new OpenAI({
-  apiKey: process.env.API_KEY,
-})
+let _openai: OpenAI | null = null
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    const apiKey = process.env.API_KEY || process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      throw new Error('Falta la variable de entorno API_KEY o OPENAI_API_KEY para el chatbot')
+    }
+    _openai = new OpenAI({ apiKey })
+  }
+  return _openai
+}
 
 interface PayloadToken {
   usuarioId: string
@@ -141,7 +149,7 @@ app.prepare().then(() => {
           io.to(conversacionId).emit('chatbot-escribiendo', true)
 
           try {
-            const stream = await openai.chat.completions.create({
+            const stream = await getOpenAI().chat.completions.create({
               model: 'gpt-4o-mini',
               messages: mensajesOpenAI,
               stream: true,
