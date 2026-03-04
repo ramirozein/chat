@@ -23,6 +23,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-movie_chat}?schema=public
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET:-un_secreto_muy_seguro}
+      API_KEY: ${API_KEY:-}
       PORT: ${APP_PORT:-3003}
     ports:
       - "${APP_PORT:-3003}:${APP_PORT:-3003}"
