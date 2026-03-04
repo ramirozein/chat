@@ -48,4 +48,4 @@ EXPOSE 3003
 ENV PORT 3003
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npx tsx server.ts"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npx tsx prisma/seed-bot.ts && npx tsx server.ts"]
