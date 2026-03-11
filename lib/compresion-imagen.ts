@@ -8,7 +8,7 @@ const CALIDAD_PNG = 80
  * Mantiene la relación de aspecto. El resultado típico es ~50-100KB.
  */
 export async function comprimirImagen(buffer: Buffer): Promise<Buffer> {
-  const resultado = await sharp(buffer)
+  const resultado = await sharp(buffer, { failOn: 'none' })
     .resize(MAX_DIMENSION, MAX_DIMENSION, {
       fit: 'inside',
       withoutEnlargement: true,
