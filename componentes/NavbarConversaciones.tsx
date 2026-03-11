@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useTheme } from 'next-themes'
 import { obtenerIniciales, obtenerColorAvatar, esConversacionBot } from '@/lib/utils-ui'
 import ModalFotoPerfil from './ModalFotoPerfil'
 
@@ -40,6 +41,10 @@ export default function NavbarConversaciones({
   const [creando, setCreando] = useState(false)
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [modalFotoAbierto, setModalFotoAbierto] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
 
   async function manejarCrear(e: React.FormEvent) {
     e.preventDefault()
@@ -451,7 +456,19 @@ export default function NavbarConversaciones({
               <p className="footer-email">{usuarioActual?.email}</p>
             </div>
           </div>
-          <button className="btn-salir" onClick={onLogout}>Salir</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            {mounted && (
+              <button
+                className="theme-toggle"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                aria-label="Cambiar tema"
+                title={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
+              >
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+            )}
+            <button className="btn-salir" onClick={onLogout}>Salir</button>
+          </div>
         </div>
 
         <ModalFotoPerfil
