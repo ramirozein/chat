@@ -151,9 +151,12 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           border-radius: var(--radio-xl);
           width: 90%;
           max-width: 400px;
+          max-height: calc(var(--app-height, 100dvh) - 2rem);
+          overflow-y: auto;
           padding: 2rem;
           box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
           animation: slideUp 0.3s ease-out;
+          -webkit-overflow-scrolling: touch;
         }
         .modal-titulo {
           font-size: 1.25rem;
@@ -249,6 +252,7 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
+          min-height: 44px;
         }
         .btn-seleccionar:hover {
           background: var(--color-primario-contenedor);
@@ -277,6 +281,7 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
+          min-height: 44px;
         }
         .btn-cancelar:hover {
           background: var(--color-superficie);
@@ -294,6 +299,7 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           cursor: pointer;
           transition: all var(--transicion);
           box-shadow: var(--sombra-primario);
+          min-height: 44px;
         }
         .btn-confirmar:hover {
           transform: translateY(-1px);

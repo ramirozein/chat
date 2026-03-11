@@ -51,8 +51,12 @@ export default function AreaChat({
   const refFinal = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    refFinal.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [mensajes])
+    // Delay to ensure the DOM has updated — important when mobile keyboard changes viewport
+    const timer = setTimeout(() => {
+      refFinal.current?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [mensajes, escribiendo, mensajeParcial])
 
   const nombreContacto = conversacion
     ? conversacion.participantes.find(p => p.usuario.id !== usuarioActual?.id)?.usuario.nombre || 'Chat'
@@ -147,9 +151,10 @@ export default function AreaChat({
           flex: 1;
           display: flex;
           flex-direction: column;
-          height: 100vh;
+          height: var(--app-height, 100dvh);
           background: var(--color-fondo);
           min-width: 0;
+          overflow: hidden;
         }
         .chat-header {
           padding: 0.75rem 1.25rem;
@@ -254,6 +259,8 @@ export default function AreaChat({
           display: flex;
           flex-direction: column;
           gap: 0.35rem;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-y: contain;
         }
         .cargando-center {
           display: flex;
@@ -307,6 +314,9 @@ export default function AreaChat({
         @media (max-width: 768px) {
           .btn-menu-chat { display: block; }
           .chat-mensajes { padding: 0.75rem; }
+          .streaming-contenido {
+            max-width: 90%;
+          }
         }
       `}</style>
 

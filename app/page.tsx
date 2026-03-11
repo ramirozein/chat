@@ -21,7 +21,7 @@ export default function PaginaInicio() {
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: 100vh;
+          min-height: var(--app-height, 100dvh);
           background: var(--color-fondo);
         }
         .spinner-ring {
