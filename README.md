@@ -1,2 +1,4 @@
 
 chat
+
+foto
