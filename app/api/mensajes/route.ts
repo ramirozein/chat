@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       where: { conversacionId },
       orderBy: { creadoEn: 'asc' },
       include: {
-        autor: { select: { id: true, nombre: true } },
+        autor: { select: { id: true, nombre: true, fotoPerfil: true } },
       },
     })
 

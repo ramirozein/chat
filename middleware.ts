@@ -9,11 +9,6 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
   const ruta = request.nextUrl.pathname
 
-  // Los endpoints móviles manejan su propia autenticación por Bearer token
-  if (ruta.startsWith('/api/movil')) {
-    return NextResponse.next()
-  }
-
   const esRutaProtegida = RUTAS_PROTEGIDAS.some(r => ruta.startsWith(r))
   const esRutaPublica = RUTAS_PUBLICAS.some(r => ruta.startsWith(r))
 

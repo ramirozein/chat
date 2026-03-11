@@ -5,7 +5,7 @@ import { obtenerIniciales, obtenerColorAvatar, esConversacionBot } from '@/lib/u
 import ModalFotoPerfil from './ModalFotoPerfil'
 
 interface Participante {
-  usuario: { id: string; nombre: string; email: string }
+  usuario: { id: string; nombre: string; email: string; fotoPerfil?: string | null }
 }
 
 interface Conversacion {
@@ -243,6 +243,7 @@ export default function NavbarConversaciones({
           font-weight: 700;
           transition: all var(--transicion);
           letter-spacing: 0.02em;
+          overflow: hidden;
         }
         .conv-nombre {
           flex: 1;
@@ -413,7 +414,20 @@ export default function NavbarConversaciones({
                       fontSize: esBot ? '1.1rem' : undefined,
                     }}
                   >
-                    {esBot ? '🤖' : obtenerIniciales(nombre)}
+                    {esBot ? '🤖' : (
+                      otro?.usuario.fotoPerfil ? (
+                        <img
+                          src={otro.usuario.fotoPerfil}
+                          alt={nombre}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            borderRadius: 'var(--radio-md)',
+                          }}
+                        />
+                      ) : obtenerIniciales(nombre)
+                    )}
                   </div>
                   <span className="conv-nombre">{esBot ? 'ChatBot IA' : nombre}</span>
                   {activa && <span className="dot-activo" />}

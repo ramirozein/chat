@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       include: {
         participantes: {
           include: {
-            usuario: { select: { id: true, nombre: true, email: true } },
+            usuario: { select: { id: true, nombre: true, email: true, fotoPerfil: true } },
           },
         },
         mensajes: {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       include: {
         participantes: {
           include: {
-            usuario: { select: { id: true, nombre: true, email: true } },
+            usuario: { select: { id: true, nombre: true, email: true, fotoPerfil: true } },
           },
         },
       },
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
       include: {
         participantes: {
           include: {
-            usuario: { select: { id: true, nombre: true, email: true } },
+            usuario: { select: { id: true, nombre: true, email: true, fotoPerfil: true } },
           },
         },
       },
