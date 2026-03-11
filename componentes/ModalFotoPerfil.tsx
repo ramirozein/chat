@@ -99,8 +99,15 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
 
     setError('')
     setArchivoSeleccionado(archivo)
-    const url = URL.createObjectURL(archivo)
-    setPreviewUrl(url)
+    
+    // FileReader es más compatible con webviews móviles que URL.createObjectURL
+    const reader = new FileReader()
+    reader.onload = (evento) => {
+      if (evento.target?.result) {
+        setPreviewUrl(evento.target.result as string)
+      }
+    }
+    reader.readAsDataURL(archivo)
   }
 
   async function manejarConfirmar() {
@@ -121,7 +128,6 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
   }
 
   function limpiarYCerrar() {
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
     setPreviewUrl(null)
     setArchivoSeleccionado(null)
     setError('')
