@@ -29,6 +29,7 @@ export type UsuarioMinAggregateOutputType = {
   nombre: string | null
   email: string | null
   contrasena: string | null
+  fotoPerfil: string | null
   creadoEn: Date | null
 }
 
@@ -37,6 +38,7 @@ export type UsuarioMaxAggregateOutputType = {
   nombre: string | null
   email: string | null
   contrasena: string | null
+  fotoPerfil: string | null
   creadoEn: Date | null
 }
 
@@ -45,6 +47,7 @@ export type UsuarioCountAggregateOutputType = {
   nombre: number
   email: number
   contrasena: number
+  fotoPerfil: number
   creadoEn: number
   _all: number
 }
@@ -55,6 +58,7 @@ export type UsuarioMinAggregateInputType = {
   nombre?: true
   email?: true
   contrasena?: true
+  fotoPerfil?: true
   creadoEn?: true
 }
 
@@ -63,6 +67,7 @@ export type UsuarioMaxAggregateInputType = {
   nombre?: true
   email?: true
   contrasena?: true
+  fotoPerfil?: true
   creadoEn?: true
 }
 
@@ -71,6 +76,7 @@ export type UsuarioCountAggregateInputType = {
   nombre?: true
   email?: true
   contrasena?: true
+  fotoPerfil?: true
   creadoEn?: true
   _all?: true
 }
@@ -152,6 +158,7 @@ export type UsuarioGroupByOutputType = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil: string | null
   creadoEn: Date
   _count: UsuarioCountAggregateOutputType | null
   _min: UsuarioMinAggregateOutputType | null
@@ -181,6 +188,7 @@ export type UsuarioWhereInput = {
   nombre?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   contrasena?: Prisma.StringFilter<"Usuario"> | string
+  fotoPerfil?: Prisma.StringNullableFilter<"Usuario"> | string | null
   creadoEn?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   mensajes?: Prisma.MensajeListRelationFilter
   conversaciones?: Prisma.ParticipanteConversacionListRelationFilter
@@ -191,6 +199,7 @@ export type UsuarioOrderByWithRelationInput = {
   nombre?: Prisma.SortOrder
   email?: Prisma.SortOrder
   contrasena?: Prisma.SortOrder
+  fotoPerfil?: Prisma.SortOrderInput | Prisma.SortOrder
   creadoEn?: Prisma.SortOrder
   mensajes?: Prisma.MensajeOrderByRelationAggregateInput
   conversaciones?: Prisma.ParticipanteConversacionOrderByRelationAggregateInput
@@ -204,6 +213,7 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
   nombre?: Prisma.StringFilter<"Usuario"> | string
   contrasena?: Prisma.StringFilter<"Usuario"> | string
+  fotoPerfil?: Prisma.StringNullableFilter<"Usuario"> | string | null
   creadoEn?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   mensajes?: Prisma.MensajeListRelationFilter
   conversaciones?: Prisma.ParticipanteConversacionListRelationFilter
@@ -214,6 +224,7 @@ export type UsuarioOrderByWithAggregationInput = {
   nombre?: Prisma.SortOrder
   email?: Prisma.SortOrder
   contrasena?: Prisma.SortOrder
+  fotoPerfil?: Prisma.SortOrderInput | Prisma.SortOrder
   creadoEn?: Prisma.SortOrder
   _count?: Prisma.UsuarioCountOrderByAggregateInput
   _max?: Prisma.UsuarioMaxOrderByAggregateInput
@@ -228,6 +239,7 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   nombre?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   email?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   contrasena?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
+  fotoPerfil?: Prisma.StringNullableWithAggregatesFilter<"Usuario"> | string | null
   creadoEn?: Prisma.DateTimeWithAggregatesFilter<"Usuario"> | Date | string
 }
 
@@ -236,6 +248,7 @@ export type UsuarioCreateInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
   mensajes?: Prisma.MensajeCreateNestedManyWithoutAutorInput
   conversaciones?: Prisma.ParticipanteConversacionCreateNestedManyWithoutUsuarioInput
@@ -246,6 +259,7 @@ export type UsuarioUncheckedCreateInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
   mensajes?: Prisma.MensajeUncheckedCreateNestedManyWithoutAutorInput
   conversaciones?: Prisma.ParticipanteConversacionUncheckedCreateNestedManyWithoutUsuarioInput
@@ -256,6 +270,7 @@ export type UsuarioUpdateInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mensajes?: Prisma.MensajeUpdateManyWithoutAutorNestedInput
   conversaciones?: Prisma.ParticipanteConversacionUpdateManyWithoutUsuarioNestedInput
@@ -266,6 +281,7 @@ export type UsuarioUncheckedUpdateInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mensajes?: Prisma.MensajeUncheckedUpdateManyWithoutAutorNestedInput
   conversaciones?: Prisma.ParticipanteConversacionUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -276,6 +292,7 @@ export type UsuarioCreateManyInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
 }
 
@@ -284,6 +301,7 @@ export type UsuarioUpdateManyMutationInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -292,6 +310,7 @@ export type UsuarioUncheckedUpdateManyInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -300,6 +319,7 @@ export type UsuarioCountOrderByAggregateInput = {
   nombre?: Prisma.SortOrder
   email?: Prisma.SortOrder
   contrasena?: Prisma.SortOrder
+  fotoPerfil?: Prisma.SortOrder
   creadoEn?: Prisma.SortOrder
 }
 
@@ -308,6 +328,7 @@ export type UsuarioMaxOrderByAggregateInput = {
   nombre?: Prisma.SortOrder
   email?: Prisma.SortOrder
   contrasena?: Prisma.SortOrder
+  fotoPerfil?: Prisma.SortOrder
   creadoEn?: Prisma.SortOrder
 }
 
@@ -316,6 +337,7 @@ export type UsuarioMinOrderByAggregateInput = {
   nombre?: Prisma.SortOrder
   email?: Prisma.SortOrder
   contrasena?: Prisma.SortOrder
+  fotoPerfil?: Prisma.SortOrder
   creadoEn?: Prisma.SortOrder
 }
 
@@ -326,6 +348,10 @@ export type UsuarioScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -365,6 +391,7 @@ export type UsuarioCreateWithoutConversacionesInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
   mensajes?: Prisma.MensajeCreateNestedManyWithoutAutorInput
 }
@@ -374,6 +401,7 @@ export type UsuarioUncheckedCreateWithoutConversacionesInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
   mensajes?: Prisma.MensajeUncheckedCreateNestedManyWithoutAutorInput
 }
@@ -399,6 +427,7 @@ export type UsuarioUpdateWithoutConversacionesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mensajes?: Prisma.MensajeUpdateManyWithoutAutorNestedInput
 }
@@ -408,6 +437,7 @@ export type UsuarioUncheckedUpdateWithoutConversacionesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mensajes?: Prisma.MensajeUncheckedUpdateManyWithoutAutorNestedInput
 }
@@ -417,6 +447,7 @@ export type UsuarioCreateWithoutMensajesInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
   conversaciones?: Prisma.ParticipanteConversacionCreateNestedManyWithoutUsuarioInput
 }
@@ -426,6 +457,7 @@ export type UsuarioUncheckedCreateWithoutMensajesInput = {
   nombre: string
   email: string
   contrasena: string
+  fotoPerfil?: string | null
   creadoEn?: Date | string
   conversaciones?: Prisma.ParticipanteConversacionUncheckedCreateNestedManyWithoutUsuarioInput
 }
@@ -451,6 +483,7 @@ export type UsuarioUpdateWithoutMensajesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversaciones?: Prisma.ParticipanteConversacionUpdateManyWithoutUsuarioNestedInput
 }
@@ -460,6 +493,7 @@ export type UsuarioUncheckedUpdateWithoutMensajesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  fotoPerfil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversaciones?: Prisma.ParticipanteConversacionUncheckedUpdateManyWithoutUsuarioNestedInput
 }
@@ -509,6 +543,7 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   nombre?: boolean
   email?: boolean
   contrasena?: boolean
+  fotoPerfil?: boolean
   creadoEn?: boolean
   mensajes?: boolean | Prisma.Usuario$mensajesArgs<ExtArgs>
   conversaciones?: boolean | Prisma.Usuario$conversacionesArgs<ExtArgs>
@@ -520,6 +555,7 @@ export type UsuarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   nombre?: boolean
   email?: boolean
   contrasena?: boolean
+  fotoPerfil?: boolean
   creadoEn?: boolean
 }, ExtArgs["result"]["usuario"]>
 
@@ -528,6 +564,7 @@ export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   nombre?: boolean
   email?: boolean
   contrasena?: boolean
+  fotoPerfil?: boolean
   creadoEn?: boolean
 }, ExtArgs["result"]["usuario"]>
 
@@ -536,10 +573,11 @@ export type UsuarioSelectScalar = {
   nombre?: boolean
   email?: boolean
   contrasena?: boolean
+  fotoPerfil?: boolean
   creadoEn?: boolean
 }
 
-export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "email" | "contrasena" | "creadoEn", ExtArgs["result"]["usuario"]>
+export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "email" | "contrasena" | "fotoPerfil" | "creadoEn", ExtArgs["result"]["usuario"]>
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mensajes?: boolean | Prisma.Usuario$mensajesArgs<ExtArgs>
   conversaciones?: boolean | Prisma.Usuario$conversacionesArgs<ExtArgs>
@@ -559,6 +597,7 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     nombre: string
     email: string
     contrasena: string
+    fotoPerfil: string | null
     creadoEn: Date
   }, ExtArgs["result"]["usuario"]>
   composites: {}
@@ -989,6 +1028,7 @@ export interface UsuarioFieldRefs {
   readonly nombre: Prisma.FieldRef<"Usuario", 'String'>
   readonly email: Prisma.FieldRef<"Usuario", 'String'>
   readonly contrasena: Prisma.FieldRef<"Usuario", 'String'>
+  readonly fotoPerfil: Prisma.FieldRef<"Usuario", 'String'>
   readonly creadoEn: Prisma.FieldRef<"Usuario", 'DateTime'>
 }
     

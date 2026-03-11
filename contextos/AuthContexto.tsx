@@ -6,6 +6,7 @@ interface Usuario {
   id: string
   nombre: string
   email: string
+  fotoPerfil?: string
 }
 
 interface AuthContextoTipo {
@@ -14,6 +15,7 @@ interface AuthContextoTipo {
   login: (email: string, contrasena: string) => Promise<{ ok: boolean; error?: string }>
   registrar: (nombre: string, email: string, contrasena: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => Promise<void>
+  actualizarFotoPerfil: (archivo: File) => Promise<{ ok: boolean; error?: string }>
 }
 
 const AuthContexto = createContext<AuthContextoTipo | undefined>(undefined)
@@ -83,6 +85,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function actualizarFotoPerfil(archivo: File) {
+    try {
+      const formData = new FormData()
+      formData.append('foto', archivo)
+
+      const res = await fetch('/api/auth/foto-perfil', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        return { ok: false, error: data.error }
+      }
+
+      // Actualizar el estado del usuario con la nueva foto
+      setUsuario(prev => prev ? { ...prev, fotoPerfil: data.fotoPerfil } : null)
+      return { ok: true }
+    } catch {
+      return { ok: false, error: 'Error al subir la foto' }
+    }
+  }
+
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' })
     setUsuario(null)
@@ -90,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContexto.Provider value={{ usuario, cargando, login, registrar, logout }}>
+    <AuthContexto.Provider value={{ usuario, cargando, login, registrar, logout, actualizarFotoPerfil }}>
       {children}
     </AuthContexto.Provider>
   )

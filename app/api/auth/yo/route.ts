@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { verificarToken } from '@/lib/auth'
 
-// Obtener datos del usuario autenticado
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('token')?.value
@@ -25,7 +24,7 @@ export async function GET(request: NextRequest) {
 
     const usuario = await prisma.usuario.findUnique({
       where: { id: payload.usuarioId },
-      select: { id: true, nombre: true, email: true, creadoEn: true },
+      select: { id: true, nombre: true, email: true, fotoPerfil: true, creadoEn: true },
     })
 
     if (!usuario) {

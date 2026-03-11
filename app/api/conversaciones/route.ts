@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { verificarToken } from '@/lib/auth'
 
-// Obtener conversaciones del usuario autenticado
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('token')?.value
@@ -61,7 +60,6 @@ export async function POST(request: NextRequest) {
     let destinatario
 
     if (esChatbot) {
-      // Buscar usuario bot
       destinatario = await prisma.usuario.findUnique({
         where: { email: 'bot@chatbot.ia' },
       })
@@ -74,7 +72,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'El email del destinatario es requerido' }, { status: 400 })
       }
 
-      // Buscar usuario destinatario
       destinatario = await prisma.usuario.findUnique({
         where: { email: emailDestino },
       })
