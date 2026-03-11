@@ -327,7 +327,7 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
             <div className="camera-container">
               <video ref={videoRef} className="camera-video" autoPlay playsInline muted />
               <button className="btn-capturar" onClick={capturarFoto}>
-                📸 Capturar
+                Capturar
               </button>
             </div>
           ) : (
@@ -350,13 +350,13 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
                 className="btn-seleccionar"
                 onClick={() => inputRef.current?.click()}
               >
-                📁 Subir foto
+                Subir foto
               </button>
               <button
                 className="btn-seleccionar"
                 onClick={abrirCamara}
               >
-                📸 Tomar foto
+                Tomar foto
               </button>
             </div>
           )}

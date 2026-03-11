@@ -33,7 +33,7 @@ export async function subirImagen(buffer: Buffer, nombreArchivo: string): Promis
     },
   })
 
-  return `https://storage.googleapis.com/${BUCKET_NAME}/fotos-perfil/${nombreArchivo}`
+  return `https://storage.googleapis.com/${BUCKET_NAME}/fotos-perfil/${nombreArchivo}?v=${Date.now()}`
 }
 
 /**
