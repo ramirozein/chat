@@ -8,7 +8,7 @@ import EntradaMensaje from './EntradaMensaje'
 import { obtenerIniciales } from '@/lib/utils-ui'
 
 interface Participante {
-  usuario: { id: string; nombre: string; email: string }
+  usuario: { id: string; nombre: string; email: string; fotoPerfil?: string | null }
 }
 
 interface Conversacion {
@@ -58,9 +58,11 @@ export default function AreaChat({
     return () => clearTimeout(timer)
   }, [mensajes, escribiendo, mensajeParcial])
 
-  const nombreContacto = conversacion
-    ? conversacion.participantes.find(p => p.usuario.id !== usuarioActual?.id)?.usuario.nombre || 'Chat'
+  const contacto = conversacion
+    ? conversacion.participantes.find(p => p.usuario.id !== usuarioActual?.id)?.usuario
     : null
+  const nombreContacto = contacto?.nombre || 'Chat'
+  const fotoContacto = contacto?.fotoPerfil
 
 
 
@@ -181,6 +183,7 @@ export default function AreaChat({
           font-weight: 700;
           color: #FFFFFF;
           box-shadow: 0 2px 8px rgba(255, 107, 44, 0.2);
+          overflow: hidden;
         }
         .header-avatar.bot {
           background: linear-gradient(135deg, #8B5CF6, #A78BFA);
@@ -326,7 +329,20 @@ export default function AreaChat({
             <button className="btn-menu-icono" onClick={onAbrirSidebar}>☰</button>
           </div>
           <div className={`header-avatar${esChatbot ? ' bot' : ''}`}>
-            {esChatbot ? '🤖' : (nombreContacto ? obtenerIniciales(nombreContacto) : '?')}
+            {esChatbot ? '🤖' : (
+              fotoContacto ? (
+                <img
+                  src={fotoContacto}
+                  alt={nombreContacto}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: 'var(--radio-md)',
+                  }}
+                />
+              ) : (nombreContacto ? obtenerIniciales(nombreContacto) : '?')
+            )}
           </div>
           <div>
             <p className="header-nombre">{esChatbot ? 'ChatBot IA' : nombreContacto}</p>

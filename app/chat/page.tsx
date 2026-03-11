@@ -8,7 +8,7 @@ import AreaChat from '@/componentes/AreaChat'
 import { esConversacionBot } from '@/lib/utils-ui'
 
 interface Participante {
-  usuario: { id: string; nombre: string; email: string }
+  usuario: { id: string; nombre: string; email: string; fotoPerfil?: string | null }
 }
 
 interface Conversacion {

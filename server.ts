@@ -88,7 +88,7 @@ app.prepare().then(() => {
             conversacionId,
           },
           include: {
-            autor: { select: { id: true, nombre: true } },
+            autor: { select: { id: true, nombre: true, fotoPerfil: true } },
           },
         })
 
@@ -181,7 +181,7 @@ app.prepare().then(() => {
                   conversacionId,
                 },
                 include: {
-                  autor: { select: { id: true, nombre: true } },
+                  autor: { select: { id: true, nombre: true, fotoPerfil: true } },
                 },
               })
 
