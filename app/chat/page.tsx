@@ -202,7 +202,7 @@ export default function PaginaChat() {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: var(--app-height, 100dvh);
             background: var(--color-fondo);
           }
           .spinner-ring {
@@ -224,7 +224,7 @@ export default function PaginaChat() {
   return (
     <div style={{
       display: 'flex',
-      height: '100vh',
+      height: 'var(--app-height, 100dvh)',
       overflow: 'hidden',
       position: 'relative',
       background: 'var(--color-fondo)',
@@ -249,7 +249,7 @@ export default function PaginaChat() {
         style={{
           width: '320px',
           minWidth: '320px',
-          height: '100vh',
+          height: 'var(--app-height, 100dvh)',
           backgroundColor: 'var(--color-fondo-elevado)',
           borderRight: '1px solid var(--color-borde)',
           display: 'flex',

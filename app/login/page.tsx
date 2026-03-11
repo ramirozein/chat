@@ -33,7 +33,7 @@ export default function PaginaLogin() {
       <style jsx>{`
         .login-container {
           display: flex;
-          min-height: 100vh;
+          min-height: var(--app-height, 100dvh);
           background: var(--color-fondo);
         }
         .login-branding {
@@ -224,9 +224,10 @@ export default function PaginaLogin() {
         @media (max-width: 768px) {
           .login-container {
             flex-direction: column;
+            min-height: var(--app-height, 100dvh);
           }
           .login-branding {
-            padding: 2.5rem 1.5rem;
+            padding: 2rem 1.5rem;
             min-height: auto;
           }
           .branding-title {
@@ -245,12 +246,21 @@ export default function PaginaLogin() {
             padding: 2rem 1.5rem;
             border-left: none;
             border-top: 1px solid var(--color-borde);
+            flex: 1;
           }
           .login-form-title {
             font-size: 1.4rem;
           }
           .login-form-desc {
             margin-bottom: 1.5rem;
+          }
+        }
+        @media (max-height: 500px) and (max-width: 768px) {
+          .login-branding {
+            display: none;
+          }
+          .login-form-side {
+            border-top: none;
           }
         }
       `}</style>

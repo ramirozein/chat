@@ -179,6 +179,8 @@ export default function NavbarConversaciones({
           flex: 1;
           overflow-y: auto;
           padding: 0.5rem;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-y: contain;
         }
         .conv-vacia {
           display: flex;
@@ -217,6 +219,7 @@ export default function NavbarConversaciones({
           transition: all var(--transicion);
           font-family: 'Plus Jakarta Sans', sans-serif;
           background: transparent;
+          min-height: 48px;
         }
         .conv-item:hover {
           background: var(--color-superficie);
@@ -264,11 +267,13 @@ export default function NavbarConversaciones({
         }
         .sidebar-footer {
           padding: 0.875rem 1.25rem;
+          padding-bottom: max(0.875rem, var(--safe-bottom, 0px));
           border-top: 1px solid var(--color-borde);
           display: flex;
           align-items: center;
           justify-content: space-between;
           background: var(--color-fondo);
+          flex-shrink: 0;
         }
         .footer-info {
           display: flex;

@@ -39,7 +39,7 @@ export default function PaginaRegistro() {
       <style jsx>{`
         .registro-container {
           display: flex;
-          min-height: 100vh;
+          min-height: var(--app-height, 100dvh);
           background: var(--color-fondo);
         }
         .registro-branding {
@@ -230,9 +230,10 @@ export default function PaginaRegistro() {
         @media (max-width: 768px) {
           .registro-container {
             flex-direction: column;
+            min-height: var(--app-height, 100dvh);
           }
           .registro-branding {
-            padding: 2.5rem 1.5rem;
+            padding: 2rem 1.5rem;
             min-height: auto;
           }
           .branding-title {
@@ -251,12 +252,21 @@ export default function PaginaRegistro() {
             padding: 2rem 1.5rem;
             border-left: none;
             border-top: 1px solid var(--color-borde);
+            flex: 1;
           }
           .registro-form-title {
             font-size: 1.4rem;
           }
           .registro-form-desc {
             margin-bottom: 1.5rem;
+          }
+        }
+        @media (max-height: 500px) and (max-width: 768px) {
+          .registro-branding {
+            display: none;
+          }
+          .registro-form-side {
+            border-top: none;
           }
         }
       `}</style>

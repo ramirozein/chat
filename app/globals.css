@@ -2,6 +2,13 @@
 @import "tailwindcss";
 
 :root {
+  /* ── Dynamic viewport height (set by ViewportHandler.tsx) ── */
+  --app-height: 100dvh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
   /* ── Background layers ── */
   --color-fondo: #0B0B12;
   --color-fondo-elevado: #101018;
@@ -55,12 +62,26 @@
 html, body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  height: var(--app-height, 100dvh);
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--color-fondo);
   color: var(--color-texto);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* ── Mobile webview optimizations ── */
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+html {
+  overflow: hidden;
+}
+
+/* ── Mobile touch optimizations ── */
+input, textarea, button, select {
+  touch-action: manipulation;
+  font-size: 16px; /* Prevents iOS auto-zoom on focus */
 }
 
 /* ── Scrollbar oscuro ── */
@@ -127,3 +148,14 @@ html, body {
   outline: 2px solid var(--color-primario);
   outline-offset: 2px;
 }
+
+/* ── Mobile: hide scrollbars but keep scrolling ── */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  * {
+    scrollbar-width: none;
+  }
+}
+
