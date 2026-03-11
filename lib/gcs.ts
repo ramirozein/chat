@@ -57,7 +57,6 @@ export async function eliminarImagen(nombreArchivo: string): Promise<void> {
     const archivo = bucket.file(`fotos-perfil/${nombreArchivo}`)
     await archivo.delete()
   } catch {
-    // Si el archivo no existe, ignorar el error
   }
 }
 
