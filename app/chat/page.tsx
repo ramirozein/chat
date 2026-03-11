@@ -27,7 +27,7 @@ interface Mensaje {
 }
 
 export default function PaginaChat() {
-  const { usuario, cargando, logout } = useAuth()
+  const { usuario, cargando, logout, actualizarFotoPerfil } = useAuth()
   const [conversaciones, setConversaciones] = useState<Conversacion[]>([])
   const [conversacionActiva, setConversacionActiva] = useState<string | null>(null)
   const [mensajes, setMensajes] = useState<Mensaje[]>([])
@@ -267,6 +267,7 @@ export default function PaginaChat() {
           onCrear={crearConversacion}
           onCrearChatbot={crearChatbot}
           onLogout={logout}
+          onActualizarFoto={actualizarFotoPerfil}
         />
       </div>
 

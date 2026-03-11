@@ -12,6 +12,7 @@ model Usuario {
   nombre      String
   email       String   @unique
   contrasena  String
+  fotoPerfil  String?
   creadoEn    DateTime @default(now())
 
   mensajes       Mensaje[]

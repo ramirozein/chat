@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { obtenerIniciales, obtenerColorAvatar, esConversacionBot } from '@/lib/utils-ui'
+import ModalFotoPerfil from './ModalFotoPerfil'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string }
@@ -15,11 +16,12 @@ interface Conversacion {
 interface Props {
   conversaciones: Conversacion[]
   conversacionActiva: string | null
-  usuarioActual: { id: string; nombre: string; email: string } | null
+  usuarioActual: { id: string; nombre: string; email: string; fotoPerfil?: string } | null
   onSeleccionar: (id: string) => void
   onCrear: (email: string) => Promise<{ ok: boolean; error?: string }>
   onCrearChatbot: () => Promise<void>
   onLogout: () => void
+  onActualizarFoto: (archivo: File) => Promise<{ ok: boolean; error?: string }>
 }
 
 
@@ -31,11 +33,13 @@ export default function NavbarConversaciones({
   onCrear,
   onCrearChatbot,
   onLogout,
+  onActualizarFoto,
 }: Props) {
   const [emailNuevo, setEmailNuevo] = useState('')
   const [errorNuevo, setErrorNuevo] = useState('')
   const [creando, setCreando] = useState(false)
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
+  const [modalFotoAbierto, setModalFotoAbierto] = useState(false)
 
   async function manejarCrear(e: React.FormEvent) {
     e.preventDefault()
@@ -285,6 +289,19 @@ export default function NavbarConversaciones({
           font-size: 0.65rem;
           font-weight: 700;
           color: #FFFFFF;
+          cursor: pointer;
+          overflow: hidden;
+          transition: all var(--transicion);
+          position: relative;
+        }
+        .footer-avatar:hover {
+          box-shadow: 0 0 0 2px var(--color-primario);
+          transform: scale(1.05);
+        }
+        .footer-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
         .footer-nombre {
           margin: 0;
@@ -403,8 +420,12 @@ export default function NavbarConversaciones({
 
         <div className="sidebar-footer">
           <div className="footer-info">
-            <div className="footer-avatar">
-              {usuarioActual?.nombre ? obtenerIniciales(usuarioActual.nombre) : '?'}
+            <div className="footer-avatar" onClick={() => setModalFotoAbierto(true)} title="Cambiar foto de perfil">
+              {usuarioActual?.fotoPerfil ? (
+                <img src={usuarioActual.fotoPerfil} alt={usuarioActual.nombre} />
+              ) : (
+                usuarioActual?.nombre ? obtenerIniciales(usuarioActual.nombre) : '?'
+              )}
             </div>
             <div style={{ minWidth: 0 }}>
               <p className="footer-nombre">{usuarioActual?.nombre}</p>
@@ -413,6 +434,14 @@ export default function NavbarConversaciones({
           </div>
           <button className="btn-salir" onClick={onLogout}>Salir</button>
         </div>
+
+        <ModalFotoPerfil
+          abierto={modalFotoAbierto}
+          onCerrar={() => setModalFotoAbierto(false)}
+          onSubir={onActualizarFoto}
+          fotoActual={usuarioActual?.fotoPerfil}
+          nombre={usuarioActual?.nombre}
+        />
       </div>
     </>
   )
