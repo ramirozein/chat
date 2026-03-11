@@ -84,30 +84,38 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
   if (!abierto) return null
 
   function manejarSeleccion(e: React.ChangeEvent<HTMLInputElement>) {
-    const archivo = e.target.files?.[0]
-    if (!archivo) return
+    try {
+      const archivo = e.target.files?.[0]
+      if (!archivo) return
 
-    if (!archivo.type.startsWith('image/')) {
-      setError('Solo se permiten imágenes')
-      return
-    }
-
-    if (archivo.size > 10 * 1024 * 1024) {
-      setError('La imagen es demasiado grande (máx. 10MB)')
-      return
-    }
-
-    setError('')
-    setArchivoSeleccionado(archivo)
-    
-    // FileReader es más compatible con webviews móviles que URL.createObjectURL
-    const reader = new FileReader()
-    reader.onload = (evento) => {
-      if (evento.target?.result) {
-        setPreviewUrl(evento.target.result as string)
+      if (archivo.type && !archivo.type.startsWith('image/')) {
+        setError('El archivo seleccionado no parece ser una imagen')
+        return
       }
+
+      if (archivo.size > 10 * 1024 * 1024) {
+        setError('La imagen es demasiado grande (máx. 10MB)')
+        return
+      }
+
+      setError('')
+      setArchivoSeleccionado(archivo)
+      
+      const reader = new FileReader()
+      reader.onload = (evento) => {
+        if (evento.target?.result) {
+          setPreviewUrl(evento.target.result as string)
+        } else {
+          setError('El lector de archivos no devolvió un resultado válido en este dispositivo.')
+        }
+      }
+      reader.onerror = () => {
+        setError('Error al leer el archivo en memoria. Es posible que la app no tenga permisos o falte memoria.')
+      }
+      reader.readAsDataURL(archivo)
+    } catch (err: any) {
+      setError(`Error inesperado: ${err?.message || 'desconocido'}`)
     }
-    reader.readAsDataURL(archivo)
   }
 
   async function manejarConfirmar() {
