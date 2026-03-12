@@ -11,48 +11,80 @@ interface Props {
 
 export default function BurbujaMensaje({ contenido, autor, esMio, hora }: Props) {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: esMio ? 'flex-end' : 'flex-start',
-      marginBottom: '0.2rem',
-      animation: 'fadeIn 0.2s ease-out',
-    }}>
-      <div style={{
-        maxWidth: '75%',
-        padding: '0.7rem 1rem',
-        borderRadius: esMio ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-        backgroundColor: esMio ? '#FF6B2C' : 'var(--color-superficie)',
-        color: esMio ? '#FFFFFF' : 'var(--color-texto)',
-        wordBreak: 'break-word',
-        boxShadow: esMio
-          ? '0 2px 12px rgba(255, 107, 44, 0.3)'
-          : 'var(--sombra-sm)',
-        border: esMio ? 'none' : '1px solid var(--color-borde)',
-      }}>
-        {!esMio && (
-          <p style={{
-            margin: '0 0 0.2rem 0',
-            fontSize: '0.7rem',
-            fontWeight: '700',
-            color: 'var(--color-primario-hover)',
-            letterSpacing: '0.02em',
-          }}>
-            {autor}
+    <>
+      <style jsx>{`
+        .mensaje-wrapper {
+          display: flex;
+          margin-bottom: 0.2rem;
+          animation: fadeIn var(--transicion);
+        }
+        .mensaje-wrapper.mio {
+          justify-content: flex-end;
+        }
+        .mensaje-wrapper.otro {
+          justify-content: flex-start;
+        }
+        .burbuja {
+          max-width: 80%;
+          padding: 0.8rem 1.2rem;
+          border-radius: 20px;
+          word-break: break-word;
+          position: relative;
+        }
+        .burbuja.mio {
+          border-bottom-right-radius: 4px;
+          background: linear-gradient(135deg, var(--color-primario), #ff8a4f);
+          color: #FFFFFF;
+          box-shadow: 0 4px 12px -2px rgba(255, 107, 44, 0.3);
+        }
+        .burbuja.otro {
+          border-bottom-left-radius: 4px;
+          background: var(--color-superficie);
+          color: var(--color-texto);
+          box-shadow: var(--sombra-sm);
+          border: 1px solid var(--color-borde);
+          var(--blur-md);
+        }
+        .autor-nombre {
+          margin: 0 0 0.25rem 0;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--color-primario-hover);
+          letter-spacing: 0.02em;
+        }
+        .contenido {
+          margin: 0;
+          font-size: 0.95rem;
+          line-height: 1.6;
+        }
+        .hora {
+          margin: 0.4rem 0 0 0;
+          font-size: 0.65rem;
+          text-align: right;
+          font-weight: 500;
+        }
+        .hora.mio {
+          color: rgba(255, 255, 255, 0.8);
+        }
+        .hora.otro {
+          color: var(--color-texto-terciario);
+        }
+      `}</style>
+      <div className={`mensaje-wrapper ${esMio ? 'mio' : 'otro'}`}>
+        <div className={`burbuja ${esMio ? 'mio' : 'otro'}`}>
+          {!esMio && (
+            <p className="autor-nombre">
+              {autor}
+            </p>
+          )}
+          <div className="contenido">
+            <ContenidoMarkdown contenido={contenido} />
+          </div>
+          <p className={`hora ${esMio ? 'mio' : 'otro'}`}>
+            {hora}
           </p>
-        )}
-        <div style={{ margin: 0, fontSize: '0.88rem', lineHeight: '1.55' }}>
-          <ContenidoMarkdown contenido={contenido} />
         </div>
-        <p style={{
-          margin: '0.3rem 0 0 0',
-          fontSize: '0.62rem',
-          textAlign: 'right',
-          opacity: esMio ? 0.8 : 0.45,
-          color: esMio ? '#FFFFFF' : 'var(--color-texto-secundario)',
-        }}>
-          {hora}
-        </p>
       </div>
-    </div>
+    </>
   )
 }

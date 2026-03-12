@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.4.2",
-  "engineVersion": "94a226be1cf2967af2541cca5529f0f7ba866919",
+  "clientVersion": "7.5.0",
+  "engineVersion": "280c870be64f457428992c43c1f6d557fab6e29e",
   "activeProvider": "postgresql",
   "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Usuario {\n  id         String   @id @default(cuid())\n  nombre     String\n  email      String   @unique\n  contrasena String\n  fotoPerfil String?\n  creadoEn   DateTime @default(now())\n\n  mensajes       Mensaje[]\n  conversaciones ParticipanteConversacion[]\n}\n\nmodel Conversacion {\n  id            String   @id @default(cuid())\n  creadoEn      DateTime @default(now())\n  actualizadoEn DateTime @updatedAt\n\n  participantes ParticipanteConversacion[]\n  mensajes      Mensaje[]\n}\n\nmodel ParticipanteConversacion {\n  id             String @id @default(cuid())\n  usuarioId      String\n  conversacionId String\n\n  usuario      Usuario      @relation(fields: [usuarioId], references: [id])\n  conversacion Conversacion @relation(fields: [conversacionId], references: [id])\n\n  @@unique([usuarioId, conversacionId])\n}\n\nmodel Mensaje {\n  id             String   @id @default(cuid())\n  contenido      String\n  iv             String\n  autorId        String\n  conversacionId String\n  creadoEn       DateTime @default(now())\n\n  autor        Usuario      @relation(fields: [autorId], references: [id])\n  conversacion Conversacion @relation(fields: [conversacionId], references: [id])\n\n  @@index([conversacionId])\n}\n",
   "runtimeDataModel": {

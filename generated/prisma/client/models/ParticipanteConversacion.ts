@@ -1166,6 +1166,11 @@ export type ParticipanteConversacionFindManyArgs<ExtArgs extends runtime.Types.E
    * Skip the first `n` ParticipanteConversacions.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ParticipanteConversacions.
+   */
   distinct?: Prisma.ParticipanteConversacionScalarFieldEnum | Prisma.ParticipanteConversacionScalarFieldEnum[]
 }
 

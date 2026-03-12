@@ -12,13 +12,14 @@ export default function BurbujaEscribiendo() {
         }
         .escribiendo-burbuja {
           padding: 0.85rem 1.2rem;
-          border-radius: 16px 16px 16px 4px;
+          border-radius: 20px 20px 20px 4px;
           background: var(--color-superficie);
           border: 1px solid var(--color-borde);
           display: flex;
           align-items: center;
           gap: 5px;
           box-shadow: var(--sombra-sm);
+          var(--blur-md);
         }
         .dot {
           width: 7px;

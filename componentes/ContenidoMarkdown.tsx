@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { Check, Copy } from 'lucide-react'
 
 interface Props {
   contenido: string
@@ -96,7 +97,7 @@ function BloqueCodigoUI({ lenguaje, codigo }: { lenguaje: string; codigo: string
         <div className="code-header">
           <span className="code-lang">{lenguaje || 'código'}</span>
           <button className={`code-copy${copiado ? ' copiado' : ''}`} onClick={copiar}>
-            {copiado ? 'Copiado' : '⎘ Copiar'}
+            {copiado ? <><Check size={14} /> Copiado</> : <><Copy size={14} /> Copiar</>}
           </button>
         </div>
         <div className="code-body">

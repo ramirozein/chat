@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import { obtenerIniciales, obtenerColorAvatar, esConversacionBot } from '@/lib/utils-ui'
 import ModalFotoPerfil from './ModalFotoPerfil'
+import { MessageSquare, Bot, Plus, MessageCircleOff, User, Moon, Sun, LogOut } from 'lucide-react'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string; fotoPerfil?: string | null }
@@ -72,81 +73,95 @@ export default function NavbarConversaciones({
           flex-direction: column;
           height: 100%;
           background: var(--color-fondo-elevado);
+          border-right: 1px solid var(--color-borde);
+          position: relative;
+          z-index: 20;
+          box-shadow: 4px 0 24px rgba(0,0,0,0.02);
         }
         .sidebar-header {
-          padding: 1.25rem;
+          padding: 1.5rem;
           border-bottom: 1px solid var(--color-borde);
+          background: var(--color-fondo-elevado);
+          position: sticky;
+          top: 0;
+          z-index: 10;
         }
         .sidebar-header-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.5rem;
         }
         .sidebar-title {
           font-size: 1.25rem;
-          font-weight: 700;
+          font-weight: 800;
           margin: 0;
           color: var(--color-texto);
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          letter-spacing: -0.01em;
         }
         .sidebar-title-accent {
-          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
+          background: linear-gradient(135deg, var(--color-primario), #ff8a4f);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           font-weight: 800;
         }
         .sidebar-header-btns {
           display: flex;
-          gap: 0.4rem;
+          gap: 0.5rem;
         }
         .btn-nuevo {
-          padding: 0.45rem 0.9rem;
-          border: 1px solid var(--color-borde);
-          border-radius: var(--radio-md);
+          padding: 0.5rem 1rem;
+          border: 1px solid var(--color-primario-suave);
+          border-radius: 12px;
           background: var(--color-primario-contenedor);
           color: var(--color-primario);
-          font-size: 0.8rem;
-          font-weight: 600;
+          font-size: 0.85rem;
+          font-weight: 700;
           font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
         }
         .btn-nuevo:hover {
           background: var(--color-primario-suave);
-          border-color: var(--color-borde-activo);
+          border-color: var(--color-primario);
+          transform: translateY(-1px);
         }
         .btn-chatbot {
-          padding: 0.45rem 0.9rem;
-          border: 1px solid rgba(139, 92, 246, 0.25);
-          border-radius: var(--radio-md);
-          background: rgba(139, 92, 246, 0.08);
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.5rem 1rem;
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          border-radius: 12px;
+          background: rgba(139, 92, 246, 0.1);
           color: #8B5CF6;
-          font-size: 0.8rem;
-          font-weight: 600;
+          font-size: 0.85rem;
+          font-weight: 700;
           font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
         }
         .btn-chatbot:hover {
-          background: rgba(139, 92, 246, 0.15);
-          border-color: rgba(139, 92, 246, 0.4);
+          background: rgba(139, 92, 246, 0.18);
+          border-color: rgba(139, 92, 246, 0.5);
+          transform: translateY(-1px);
         }
         .nuevo-form {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
-          margin-top: 0.75rem;
-          animation: fadeIn 0.2s ease-out;
+          gap: 0.75rem;
+          margin-top: 1rem;
+          animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .nuevo-input {
           width: 100%;
-          padding: 0.7rem 0.875rem;
+          padding: 0.8rem 1rem;
           border: 1px solid var(--color-borde);
-          border-radius: var(--radio-md);
-          font-size: 0.85rem;
+          border-radius: 16px;
+          font-size: 0.9rem;
           font-family: 'Plus Jakarta Sans', sans-serif;
           color: var(--color-texto);
           background: var(--color-superficie);
@@ -161,31 +176,38 @@ export default function NavbarConversaciones({
           color: var(--color-texto-terciario);
         }
         .btn-crear {
-          padding: 0.6rem 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.75rem 1rem;
           border: none;
-          border-radius: var(--radio-md);
-          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
+          border-radius: 16px;
+          background: linear-gradient(135deg, var(--color-primario), #ff8a4f);
           color: #FFFFFF;
-          font-size: 0.8rem;
+          font-size: 0.85rem;
           font-weight: 700;
           font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
           box-shadow: var(--sombra-primario);
         }
-        .btn-crear:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-crear:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(255, 107, 44, 0.35); }
         .btn-crear:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .error-nuevo {
           color: var(--color-error);
-          font-size: 0.75rem;
+          font-size: 0.8rem;
           margin: 0;
+          font-weight: 500;
         }
         .conversaciones-lista {
           flex: 1;
           overflow-y: auto;
-          padding: 0.5rem;
+          padding: 1rem;
           -webkit-overflow-scrolling: touch;
           overscroll-behavior-y: contain;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
         }
         .conv-vacia {
           display: flex;
@@ -198,116 +220,130 @@ export default function NavbarConversaciones({
           color: var(--color-texto-secundario);
         }
         .conv-vacia-icon {
-          width: 64px;
-          height: 64px;
-          border-radius: var(--radio-lg);
+          width: 72px;
+          height: 72px;
+          border-radius: 20px;
           background: var(--color-primario-contenedor);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 1.75rem;
-          margin-bottom: 0.75rem;
+          margin-bottom: 1rem;
           border: 1px solid var(--color-borde);
+          box-shadow: var(--sombra-sm);
         }
         .conv-item {
           width: 100%;
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.7rem 0.75rem;
-          border-radius: var(--radio-md);
-          border: none;
+          gap: 0.85rem;
+          padding: 0.85rem 1rem;
+          border-radius: 16px;
+          border: 1px solid transparent;
           cursor: pointer;
           text-align: left;
           color: var(--color-texto);
-          margin-bottom: 0.15rem;
           transition: all var(--transicion);
           font-family: 'Plus Jakarta Sans', sans-serif;
           background: transparent;
-          min-height: 48px;
+          position: relative;
+          overflow: hidden;
         }
         .conv-item:hover {
           background: var(--color-superficie);
+          border-color: var(--color-borde);
         }
         .conv-item.activa {
           background: var(--color-primario-contenedor);
-          border: 1px solid var(--color-borde-activo);
+          border-color: var(--color-borde-activo);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .conv-item.activa::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: var(--color-primario);
+          border-radius: 4px 0 0 4px;
         }
         .conv-item.activa:hover {
           background: var(--color-primario-suave);
         }
         .conv-avatar {
-          width: 42px;
-          height: 42px;
-          min-width: 42px;
-          border-radius: var(--radio-md);
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
+          border-radius: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.75rem;
+          font-size: 0.85rem;
           font-weight: 700;
           transition: all var(--transicion);
           letter-spacing: 0.02em;
           overflow: hidden;
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
         .conv-nombre {
           flex: 1;
           min-width: 0;
-          font-weight: 500;
-          font-size: 0.88rem;
+          font-weight: 600;
+          font-size: 0.95rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
         .conv-item.activa .conv-nombre {
           color: var(--color-primario);
-          font-weight: 600;
+          font-weight: 700;
         }
         .dot-activo {
-          width: 7px;
-          height: 7px;
+          width: 8px;
+          height: 8px;
           border-radius: 50%;
           background: var(--color-primario);
-          box-shadow: 0 0 8px rgba(255, 107, 44, 0.5);
+          box-shadow: 0 0 8px rgba(255, 107, 44, 0.6);
           animation: glowPulse 2s ease-in-out infinite;
         }
         .sidebar-footer {
-          padding: 0.875rem 1.25rem;
-          padding-bottom: max(0.875rem, var(--safe-bottom, 0px));
+          padding: 1.25rem;
+          padding-bottom: max(1.25rem, var(--safe-bottom, 0px));
           border-top: 1px solid var(--color-borde);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background: var(--color-fondo);
+          background: var(--color-fondo-elevado);
           flex-shrink: 0;
         }
         .footer-info {
           display: flex;
           align-items: center;
-          gap: 0.65rem;
+          gap: 0.75rem;
           min-width: 0;
           flex: 1;
         }
         .footer-avatar {
-          width: 34px;
-          height: 34px;
-          min-width: 34px;
-          border-radius: var(--radio-sm);
-          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, var(--color-primario), #ff8a4f);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.65rem;
+          font-size: 0.8rem;
           font-weight: 700;
           color: #FFFFFF;
           cursor: pointer;
           overflow: hidden;
           transition: all var(--transicion);
-          position: relative;
+          box-shadow: var(--sombra-sm);
         }
         .footer-avatar:hover {
-          box-shadow: 0 0 0 2px var(--color-primario);
-          transform: scale(1.05);
+          box-shadow: 0 0 0 3px var(--color-primario-suave);
+          transform: translateY(-2px);
         }
         .footer-avatar img {
           width: 100%;
@@ -316,36 +352,37 @@ export default function NavbarConversaciones({
         }
         .footer-nombre {
           margin: 0;
-          font-weight: 600;
-          font-size: 0.82rem;
+          font-weight: 700;
+          font-size: 0.9rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
           color: var(--color-texto);
         }
         .footer-email {
-          margin: 0;
+          margin: 0 0 0.1rem 0;
           color: var(--color-texto-terciario);
-          font-size: 0.7rem;
+          font-size: 0.75rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
         .btn-salir {
-          padding: 0.4rem 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.55rem;
           border: 1px solid var(--color-error-borde);
-          border-radius: var(--radio-sm);
+          border-radius: 10px;
           background: var(--color-error-fondo);
           color: var(--color-error);
-          font-size: 0.75rem;
-          font-weight: 600;
-          font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
         }
         .btn-salir:hover {
           background: rgba(248, 113, 113, 0.18);
           border-color: rgba(248, 113, 113, 0.35);
+          transform: translateY(-1px);
         }
       `}</style>
 
@@ -353,14 +390,14 @@ export default function NavbarConversaciones({
         <div className="sidebar-header">
           <div className="sidebar-header-row">
             <h2 className="sidebar-title">
-              <span className="sidebar-title-accent">💬</span> Chats
+              <span className="sidebar-title-accent"><MessageSquare size={22} /></span> Chats
             </h2>
             <div className="sidebar-header-btns">
               <button className="btn-chatbot" onClick={onCrearChatbot}>
-                🤖 IA
+                <Bot size={16} /> IA
               </button>
-              <button className="btn-nuevo" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
-                + Nuevo
+              <button className="btn-nuevo" onClick={() => setMostrarFormulario(!mostrarFormulario)} style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                <Plus size={16} /> Nuevo
               </button>
             </div>
           </div>
@@ -384,7 +421,7 @@ export default function NavbarConversaciones({
         <div className="conversaciones-lista">
           {conversaciones.length === 0 ? (
             <div className="conv-vacia">
-              <div className="conv-vacia-icon">🗨️</div>
+              <div className="conv-vacia-icon"><MessageCircleOff size={32} color="var(--color-primario)" /></div>
               <p style={{ fontWeight: 600, color: 'var(--color-texto)', margin: '0 0 0.25rem' }}>
                 No tienes conversaciones
               </p>
@@ -416,10 +453,9 @@ export default function NavbarConversaciones({
                           : 'var(--color-superficie)'),
                       color: activa ? '#FFF' : (esBot ? '#8B5CF6' : 'var(--color-texto-secundario)'),
                       border: activa ? 'none' : (esBot ? '1px solid rgba(139, 92, 246, 0.25)' : '1px solid var(--color-borde)'),
-                      fontSize: esBot ? '1.1rem' : undefined,
                     }}
                   >
-                    {esBot ? '🤖' : (
+                    {esBot ? <Bot size={20} /> : (
                       otro?.usuario.fotoPerfil ? (
                         <img
                           src={otro.usuario.fotoPerfil}
@@ -448,7 +484,7 @@ export default function NavbarConversaciones({
               {usuarioActual?.fotoPerfil ? (
                 <img src={usuarioActual.fotoPerfil} alt={usuarioActual.nombre} />
               ) : (
-                usuarioActual?.nombre ? obtenerIniciales(usuarioActual.nombre) : '?'
+                usuarioActual?.nombre ? obtenerIniciales(usuarioActual.nombre) : <User size={18} />
               )}
             </div>
             <div style={{ minWidth: 0 }}>
@@ -464,10 +500,10 @@ export default function NavbarConversaciones({
                 aria-label="Cambiar tema"
                 title={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
               >
-                {theme === 'dark' ? '☀️' : '🌙'}
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
             )}
-            <button className="btn-salir" onClick={onLogout}>Salir</button>
+            <button className="btn-salir" onClick={onLogout} title="Salir"><LogOut size={18} /></button>
           </div>
         </div>
 
