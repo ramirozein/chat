@@ -6,6 +6,7 @@ import BurbujaEscribiendo from './BurbujaEscribiendo'
 import ContenidoMarkdown from './ContenidoMarkdown'
 import EntradaMensaje from './EntradaMensaje'
 import { obtenerIniciales } from '@/lib/utils-ui'
+import { Menu, MessageCircleOff, Bot, Send } from 'lucide-react'
 
 interface Participante {
   usuario: { id: string; nombre: string; email: string; fotoPerfil?: string | null }
@@ -134,9 +135,9 @@ export default function AreaChat({
         `}</style>
         <div className="vacio-root">
           <div className="btn-menu-vacio">
-            <button className="btn-menu-icono" onClick={onAbrirSidebar}>☰</button>
+            <button className="btn-menu-icono" onClick={onAbrirSidebar}><Menu size={20} /></button>
           </div>
-          <div className="vacio-icon">💬</div>
+          <div className="vacio-icon"><MessageCircleOff size={40} color="var(--color-primario)" /></div>
           <h2 className="vacio-titulo">Selecciona una conversación</h2>
           <p className="vacio-desc">
             Elige un chat del panel izquierdo o crea uno nuevo para comenzar
@@ -157,32 +158,35 @@ export default function AreaChat({
           background: var(--color-fondo);
           min-width: 0;
           overflow: hidden;
+          position: relative;
         }
         .chat-header {
-          padding: 0.75rem 1.25rem;
+          padding: 1rem 1.5rem;
           border-bottom: 1px solid var(--color-borde);
-          background: var(--color-fondo-elevado);
+          background: var(--color-superficie);
+          var(--blur-md);
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 1rem;
           flex-shrink: 0;
+          z-index: 10;
         }
         .btn-menu-chat {
           display: none;
         }
         .header-avatar {
-          width: 40px;
-          height: 40px;
-          min-width: 40px;
-          border-radius: var(--radio-md);
-          background: linear-gradient(135deg, #FF6B2C, #FF8F5C);
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
+          border-radius: 16px;
+          background: linear-gradient(135deg, var(--color-primario), #ff8a4f);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.8rem;
+          font-size: 0.9rem;
           font-weight: 700;
           color: #FFFFFF;
-          box-shadow: 0 2px 8px rgba(255, 107, 44, 0.2);
+          box-shadow: var(--sombra-sm);
           overflow: hidden;
         }
         .header-avatar.bot {
@@ -234,10 +238,11 @@ export default function AreaChat({
           50% { opacity: 0; }
         }
         .header-nombre {
-          margin: 0;
-          font-weight: 600;
-          font-size: 0.95rem;
+          margin: 0 0 0.15rem 0;
+          font-weight: 700;
+          font-size: 1rem;
           color: var(--color-texto);
+          letter-spacing: -0.01em;
         }
         .header-estado {
           margin: 0;
@@ -258,12 +263,13 @@ export default function AreaChat({
         .chat-mensajes {
           flex: 1;
           overflow-y: auto;
-          padding: 1.25rem;
+          padding: 1.5rem;
           display: flex;
           flex-direction: column;
-          gap: 0.35rem;
+          gap: 0.5rem;
           -webkit-overflow-scrolling: touch;
           overscroll-behavior-y: contain;
+          scroll-behavior: smooth;
         }
         .cargando-center {
           display: flex;
@@ -326,10 +332,10 @@ export default function AreaChat({
       <div className="chat-root">
         <div className="chat-header">
           <div className="btn-menu-chat">
-            <button className="btn-menu-icono" onClick={onAbrirSidebar}>☰</button>
+            <button className="btn-menu-icono" onClick={onAbrirSidebar}><Menu size={20} /></button>
           </div>
           <div className={`header-avatar${esChatbot ? ' bot' : ''}`}>
-            {esChatbot ? '🤖' : (
+            {esChatbot ? <Bot size={22} /> : (
               fotoContacto ? (
                 <img
                   src={fotoContacto}
@@ -360,7 +366,7 @@ export default function AreaChat({
             </div>
           ) : mensajes.length === 0 ? (
             <div className="sin-mensajes">
-              <div className="sin-mensajes-icon">👋</div>
+              <div className="sin-mensajes-icon"><Send size={28} color="var(--color-primario)" /></div>
               <p style={{ fontWeight: 600, color: 'var(--color-texto)' }}>¡Envía el primer mensaje!</p>
             </div>
           ) : (

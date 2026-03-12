@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { Camera, Image as ImageIcon, Video } from 'lucide-react'
 
 interface Props {
   abierto: boolean
@@ -227,6 +228,9 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           transform: scaleX(-1);
         }
         .btn-capturar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           padding: 0.6rem 1.5rem;
           border: none;
           border-radius: var(--radio-md);
@@ -237,8 +241,6 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
-          display: flex;
-          align-items: center;
           gap: 0.4rem;
         }
         .btn-capturar:hover {
@@ -252,6 +254,9 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
         }
         .btn-seleccionar {
           flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           padding: 0.75rem 1rem;
           border: 1px solid var(--color-borde);
           border-radius: var(--radio-md);
@@ -262,9 +267,6 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
           font-family: 'Plus Jakarta Sans', sans-serif;
           cursor: pointer;
           transition: all var(--transicion);
-          display: flex;
-          align-items: center;
-          justify-content: center;
           gap: 0.5rem;
           min-height: 44px;
         }
@@ -347,7 +349,7 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
             <div className="camera-container">
               <video ref={videoRef} className="camera-video" autoPlay playsInline muted />
               <button className="btn-capturar" onClick={capturarFoto}>
-                Capturar
+                <Camera size={18} /> Capturar
               </button>
             </div>
           ) : (
@@ -358,7 +360,7 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
                 ) : fotoActual ? (
                   <img src={fotoActual} alt={nombre || 'Foto de perfil'} />
                 ) : (
-                  <span className="preview-placeholder">📷</span>
+                  <span className="preview-placeholder"><Camera size={48} color="var(--color-texto-terciario)" /></span>
                 )}
               </div>
             </div>
@@ -370,13 +372,13 @@ export default function ModalFotoPerfil({ abierto, onCerrar, onSubir, fotoActual
                 className="btn-seleccionar"
                 onClick={() => inputRef.current?.click()}
               >
-                Subir foto
+                <ImageIcon size={18} /> Subir foto
               </button>
               <button
                 className="btn-seleccionar"
                 onClick={abrirCamara}
               >
-                Tomar foto
+                <Video size={18} /> Tomar foto
               </button>
             </div>
           )}

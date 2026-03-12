@@ -254,7 +254,7 @@ export default function PaginaChat() {
           borderRight: '1px solid var(--color-borde)',
           display: 'flex',
           flexDirection: 'column',
-          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease',
           zIndex: 50,
         }}
         className={`sidebar ${sidebarAbierto ? 'sidebar-abierto' : ''}`}
